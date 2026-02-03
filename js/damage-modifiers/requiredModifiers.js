@@ -77,11 +77,9 @@ export function organizeMovesBonus(movesInfoArray, attackerTypes){
 }
 
 export function organizeMovesPower(movesInfoArray, hitPerMove){
-    let allMovesArray = [0, 0, 0, 0]
     for(let i=0; i<movesInfoArray.length; i++){
-        allMovesArray[i] = movesInfoArray[i][0]*hitPerMove[i].value
+        movesInfoArray[i][0] = movesInfoArray[i][0]*hitPerMove[i].value
     }
-    return allMovesArray
 }
 
 export function getFinalStats(statElement, currentStatus){
@@ -92,7 +90,7 @@ export function getFinalStats(statElement, currentStatus){
         
         if (i>0){
             let statChanges = parseFloat(everyStat[i].cells[3].children[0].value);
-            parsedValues[i] = getStatValue*statChanges*applyDebuffBurnParalysis(i, currentStatus.value);
+            parsedValues[i] = getStatValue*statChanges*applyDebuffBurnParalysis(i, currentStatus);
         }
         else {
             parsedValues[i] = getStatValue;

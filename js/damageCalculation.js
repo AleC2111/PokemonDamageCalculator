@@ -1,9 +1,10 @@
 import { utilSeparateColons } from "./utils.js"
 import { organizeMovesBonus, organizeMovesEffective, organizeMovesPower, 
     parseMoveInfo, getFinalStats } from "./damage-modifiers/requiredModifiers.js"
+import { setWeatherDamageMultipliers, setWeatherDefenseMultipliers } from "./damage-modifiers/weatherModifiers.js"
 
 function calculateFinalDamage(attackerStats, defenderStats, attackerLevel, effectiveness, 
-    movesBonus, basePower, movesInfoArray, attackerStatus, defenderStatus){
+    movesBonus, movesInfoArray, attackerStatus, defenderStatus){
 
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
     attackerLevel = parseInt(attackerLevel)
@@ -18,14 +19,14 @@ function calculateFinalDamage(attackerStats, defenderStats, attackerLevel, effec
         let minVariation = 0.01*movesBonus[i]*effectiveness[i]*85
         let maxVariation = 0.01*movesBonus[i]*effectiveness[i]*100
         if (movesInfoArray[i][3]==="physical"){
-            let attack = (0.2*attackerLevel+1)*attackerStats[1]*basePower[i]
+            let attack = (0.2*attackerLevel+1)*attackerStats[1]*movesInfoArray[i][0]
             let defense = 25*defenderStats[2]
 
             finalDamageArray[i][0] = Math.floor(minVariation*((attack/defense)+2))
             finalDamageArray[i][1] = Math.floor(maxVariation*((attack/defense)+2))
         }
         else if (movesInfoArray[i][3]==="special"){
-            let specialAttack = (0.2*attackerLevel+1)*attackerStats[3]*basePower[i]
+            let specialAttack = (0.2*attackerLevel+1)*attackerStats[3]*movesInfoArray[i][0]
             let specialDefense = 25*defenderStats[4]
 
             finalDamageArray[i][0] = Math.floor(minVariation*((specialAttack/specialDefense)+2))
@@ -70,9 +71,11 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
     const defendingFinalStats = defendingPokemonHTML.querySelector(".calculated-stats")
     const defenderStatus = defendingPokemonHTML.querySelector(".status")
     
+    const activeWeather = document.querySelector(".weather")
     const confirmButton = document.getElementById("confirm-damage")
     confirmButton.addEventListener('click', async function() {
         try{
+            console.log(activeWeather.value)
             const attackerPanel = damagePanel.children
             const attackerName = attackingPokemonHTML.querySelector(".name").value
             // Tipos
@@ -83,24 +86,28 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
             // Efectividad
             const effectiveness = await organizeMovesEffective(movesInfoArray, otherTypes);
             // Estadisticas
-            const attackerStats = getFinalStats(attackingFinalStats, attackerStatus);
-            const defenderStats = getFinalStats(defendingFinalStats, defenderStatus);
+            const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value);
+            const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value);
             // STAB
             const movesBonus = organizeMovesBonus(movesInfoArray, ownTypes);
             // Potencia
-            const basePower = organizeMovesPower(movesInfoArray, hitPerMove);
+            organizeMovesPower(movesInfoArray, hitPerMove);
+            // Climas
+            setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
+            setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defendingFinalStats)
             // Calculo final
             const finalDamage = calculateFinalDamage(attackerStats, 
                                                     defenderStats, 
-                                                    attackingLevel.value, 
+                                                    attackingLevel.value,
                                                     effectiveness, 
                                                     movesBonus, 
-                                                    basePower, 
                                                     movesInfoArray,
                                                     attackerStatus.value,
                                                     defenderStatus.value
                                                 );
+            // Calculo en porcentajes
             const finalDamagePercentage = damagePercentage(defenderStats, finalDamage);
+            // Colocar calculo en el HTML
             changeDamagePanel(attackerPanel, attackerName, finalDamage, finalDamagePercentage);
         } catch (error) {
             console.error('Error:', error);
