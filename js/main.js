@@ -20,6 +20,7 @@ addNatureNames(naturesFirst);
 addNatureNames(naturesSecond);
 addStatusNames(statusFirst);
 addStatusNames(statusSecond);
+
 obtainPokemon(firstPokemon);
 obtainPokemon(secondPokemon);
 damageResults(firstPokemon, secondPokemon, damagePanel[0]);

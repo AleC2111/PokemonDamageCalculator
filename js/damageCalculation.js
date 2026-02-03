@@ -2,6 +2,7 @@ import { utilSeparateColons } from "./utils.js"
 import { organizeMovesBonus, organizeMovesEffective, organizeMovesPower, 
     parseMoveInfo, getFinalStats } from "./damage-modifiers/requiredModifiers.js"
 import { setWeatherDamageMultipliers, setWeatherDefenseMultipliers } from "./damage-modifiers/weatherModifiers.js"
+import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
 
 function calculateFinalDamage(attackerStats, defenderStats, attackerLevel, effectiveness, 
     movesBonus, movesInfoArray, attackerStatus, defenderStatus){
@@ -64,6 +65,7 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
     const attackingFinalStats = attackingPokemonHTML.querySelector(".calculated-stats")
     const attackerStatus = attackingPokemonHTML.querySelector(".status")
     const attackingMoves = attackingPokemonHTML.querySelector(".all-moves")
+    const moveNames = attackingMoves.querySelectorAll(".move-select")
     const moveData = attackingMoves.querySelectorAll(".move-info")
     const hitPerMove = attackingMoves.querySelectorAll(".times-hit")
 
@@ -72,17 +74,17 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
     const defenderStatus = defendingPokemonHTML.querySelector(".status")
     
     const activeWeather = document.querySelector(".weather")
+    const activeTerrain = document.querySelector(".terrain")
     const confirmButton = document.getElementById("confirm-damage")
     confirmButton.addEventListener('click', async function() {
         try{
-            console.log(activeWeather.value)
             const attackerPanel = damagePanel.children
             const attackerName = attackingPokemonHTML.querySelector(".name").value
             // Tipos
             const ownTypes = utilSeparateColons(attackingTypes.textContent);
             const otherTypes = utilSeparateColons(defendingTypes.textContent);
             // Movimientos
-            const movesInfoArray = parseMoveInfo(moveData);
+            const movesInfoArray = parseMoveInfo(moveData, moveNames);
             // Efectividad
             const effectiveness = await organizeMovesEffective(movesInfoArray, otherTypes);
             // Estadisticas
@@ -95,6 +97,8 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
             // Climas
             setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
             setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defendingFinalStats)
+            // Campos
+            setTerrainMultipliers(activeTerrain.value, movesInfoArray, attackerStatus.value)
             // Calculo final
             const finalDamage = calculateFinalDamage(attackerStats, 
                                                     defenderStats, 

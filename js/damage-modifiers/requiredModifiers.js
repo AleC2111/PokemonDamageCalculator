@@ -20,11 +20,13 @@ async function getTypeRelations(type, defendTypes){
     }
 }
 
-export function parseMoveInfo(attackingMoves){
+export function parseMoveInfo(attackingMoves, allMoveNames){
     let movesInfoArray = []
     for (let i=0;i<attackingMoves.length;i++){
         const moveContent = attackingMoves[i].textContent
         movesInfoArray.push(utilSeparateSpaces(moveContent))
+        const moveName = allMoveNames[i].options[allMoveNames[i].selectedIndex].text
+        movesInfoArray[i].push(moveName)
     }
     return movesInfoArray
 }

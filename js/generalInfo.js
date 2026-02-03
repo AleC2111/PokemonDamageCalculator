@@ -74,7 +74,7 @@ export function obtainPokemon(pokemonElementsHTML) {
                 throw new Error(`Error HTTP! estado: ${response.status}`);
             }
             let data = await response.json();
-            console.log(data);
+            
             addMoveOptions(data, movesSelectors);
             getMoveData(movesSelectors, movesInfo); 
             getTypes(data, types);

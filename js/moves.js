@@ -24,14 +24,14 @@ function acommodateMoveData(moveJSON){
     const accuracy = moveJSON["accuracy"]
     const type = moveJSON["type"]["name"]
     const damageClass = moveJSON["damage_class"]["name"]
-    const numberOfHits = moveJSON["meta"]["max_hits"]
+    const priority = moveJSON["priority"]
 
     return [
         power===null? 0: power,
         accuracy===null? 0: accuracy,
         type,
         damageClass,
-        numberOfHits===null? 1: numberOfHits
+        priority===null? 0: priority
     ]
 }
 

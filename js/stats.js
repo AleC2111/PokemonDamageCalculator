@@ -54,7 +54,7 @@ export function natureValue(natureName){
 export function addStatusNames(statusElement){
     const allStatusEffects = [
         "Ninguno", "Quemado", "Paralizado", "Envenenado", 
-        "Gravemente Envenenado", "Dormido", "Congelado"
+        "Gravemente Envenenado", "Dormido", "Congelado", "Confundido"
     ]
 
     for (let i=0; i<allStatusEffects.length; i++){

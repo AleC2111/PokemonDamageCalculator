@@ -15,7 +15,7 @@ export function setWeatherDamageMultipliers(activeClimateName, movesInfoArray, d
         let strongWindsReduction = strongWindsDamageReduction(moveType, activeClimateName, defenderTypes)
         let harshSunCancelDamage = weatherCancelDamage(isWaterType, activeClimateName, "harsh-sun", isStatusMove)
         let heavyRainCancelDamage = weatherCancelDamage(isFireType, activeClimateName, "heavy-rain", isStatusMove)
-        console.log(isFireType, sunDamageBoost)
+        
         movesInfoArray[i][0] = movesInfoArray[i][0]*sunDamageBoost
         movesInfoArray[i][0] = movesInfoArray[i][0]*rainDamageBoost
         movesInfoArray[i][0] = movesInfoArray[i][0]*sunDamageReduction
