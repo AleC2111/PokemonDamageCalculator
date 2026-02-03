@@ -7,13 +7,24 @@ Para probar el proyecto solo necesitas instalarlo y tener conexion a internet pa
 - (damage-modifiers)
     - Gravemente Envenenado
     - Daño Pasivo
-    - Objetos
+    - Trampas del campo y barreras (fieldSideModifiers)
+    - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
+    - Objetos equipables
     - Bayas
     - Mineral Evolutivo
     - Habilidades
-    - Trampas del campo y barreras
     - Teracristalizacion
-- Categorías de movimientos (Puños, Contacto, Corte, Balas, Pulsos, etc)
+- Propiedades de movimientos 
+    - Contacto
+    - Puños 
+    - Sonido
+    - Viento 
+    - Corte 
+    - Proyectiles 
+    - Pulsos
+    - Polvos
+    - Danza
+    - Explosivos
 - Casos especiales de movimientos (Otra stat en calculo, Peso, Vida, Estatus, Amistad, Baya, Objeto, Variación, etc)
 - Tomar genero y formas alternativas (Aegislash)
 - Validaciones para precondicion y postcondicion de todo
