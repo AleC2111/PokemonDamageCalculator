@@ -37,17 +37,18 @@ function setFinalStats(finalStatsElement, calculatedStats){
 }
 
 function getStatCalculation(data, level, natureElement, finalStats){
-    if (level.value && (level.value <= 100 && level.value >= 1)){
-        const natureMultiplier = natureValue(natureElement.value)
-        let calculatedStats = calculatePokemonStats(level.value, data["stats"], natureMultiplier, finalStats)
-        if(calculatedStats===1){
-            alert("Valores invalidos para IVs y EVs")
-            return
+    try {
+        if (level.value && (level.value <= 100 && level.value >= 1)){
+            const natureMultiplier = natureValue(natureElement.value)
+            let calculatedStats = calculatePokemonStats(level.value, data["stats"], natureMultiplier, finalStats)
+            setFinalStats(finalStats, calculatedStats)
         }
-        setFinalStats(finalStats, calculatedStats)
-    }
-    else{
-        alert("El nivel debe tener un valor entre 1 y 100")
+        else{
+            alert("El nivel debe tener un valor entre 1 y 100")
+        }
+    } catch (error){
+        console.log(error)
+        alert("Valores invalidos para IVs y EVs")
     }
 }
 

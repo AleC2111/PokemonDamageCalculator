@@ -1,5 +1,5 @@
-import { utilSeparateSpaces } from "../utils";
-import { applyDebuffBurnParalysis } from "./statusEffectModifiers";
+import { utilSeparateSpaces } from "../utils.js";
+import { applyDebuffBurnParalysis } from "./statusEffectModifiers.js";
 
 async function getTypeRelations(type, defendTypes){
     try{

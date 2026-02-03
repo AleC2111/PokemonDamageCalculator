@@ -76,7 +76,7 @@ function getStatMofications(finalStats){
         let negativeTest = individualValues[i]<0 || effortValues[i]<0
         let overflowTest = individualValues[i]>31 || effortValues[i]>252
         if (negativeTest || overflowTest){
-            return {iv: 1, ev: 1};
+            throw new Error("Valores invalidos para IVs y EVs");
         }
     }
 
@@ -88,9 +88,6 @@ function getStatMofications(finalStats){
 
 export function calculatePokemonStats(level, statsArray, natureMultiplier, finalStats){
     let { iv, ev } = getStatMofications(finalStats)
-    if (iv===1 && ev===1){
-        return 1; // Condicion de error 
-    }
     let finalCalculation = [0, 0, 0, 0, 0, 0]
     
     level = parseInt(level);
