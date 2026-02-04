@@ -78,6 +78,9 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
     const confirmButton = document.getElementById("confirm-damage")
     confirmButton.addEventListener('click', async function() {
         try{
+            if(!attackingFinalStats.rows[0].cells[0].textContent || !defendingFinalStats.rows[0].cells[0].textContent){
+                throw new Error("Faltan valores")
+            }
             const attackerPanel = damagePanel.children
             const attackerName = attackingPokemonHTML.querySelector(".name").value
             // Tipos
@@ -114,6 +117,7 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
             // Colocar calculo en el HTML
             changeDamagePanel(attackerPanel, attackerName, finalDamage, finalDamagePercentage);
         } catch (error) {
+            alert("Completa los campos antes de hacer calculo")
             console.error('Error:', error);
         }
     })

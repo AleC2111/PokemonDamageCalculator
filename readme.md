@@ -3,10 +3,10 @@ Este proyecto esta siendo desarrollado con el proposito de aprender a usar JavaS
 Para probar el proyecto solo necesitas instalarlo y tener conexion a internet para hacer peticiones a PokeAPI
 
 ## Falta por implementar
-- Organizar damageCalculation.js
+- Organizar damageCalculation.js !
 - (damage-modifiers)
-    - Gravemente Envenenado
-    - Daño Pasivo
+    - Gravemente Envenenado !
+    - Daño Pasivo !
     - Trampas del campo y barreras (fieldSideModifiers)
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Objetos equipables

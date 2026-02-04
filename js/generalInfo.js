@@ -71,6 +71,7 @@ export function obtainPokemon(pokemonElementsHTML) {
         try {
             const response = await fetch(url, {method:"GET"});
             if (!response.ok) {
+                alert("Error: No existe ese pokemon")
                 throw new Error(`Error HTTP! estado: ${response.status}`);
             }
             let data = await response.json();
@@ -90,6 +91,5 @@ export function obtainPokemon(pokemonElementsHTML) {
             getMoveData(movesSelectors, movesInfo); 
         });
     });
-    
 }
 
