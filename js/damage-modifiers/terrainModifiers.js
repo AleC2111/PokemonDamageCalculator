@@ -55,7 +55,7 @@ function validateStatus(statusCondition, activeTerrainName){
     const anyStatusCondition = statusCondition==="Quemado" || statusCondition==="Envenenado" || 
         statusCondition==="Gravemente Envenenado" || statusCondition==="Paralizado" || 
         statusCondition==="Congelado" || statusCondition==="Confundido" || statusCondition==="Dormido"
-    console.log(activeTerrainName)
+    
     if(statusCondition==="Paralizado" && activeTerrainName==="electric"){
         alert("Un pokemon no puede tener ese estado en Campo Electrico")
         throw new Error("Un pokemon no puede tener ese estado en Campo Electrico")

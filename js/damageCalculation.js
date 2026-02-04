@@ -4,34 +4,14 @@ import { organizeMovesBonus, organizeMovesEffective, organizeMovesPower,
 import { setWeatherDamageMultipliers, setWeatherDefenseMultipliers } from "./damage-modifiers/weatherModifiers.js"
 import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
 
-function calculateFinalDamage(attackerStats, defenderStats, attackerLevel, effectiveness, 
-    movesBonus, movesInfoArray, attackerStatus, defenderStatus){
-
+function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
-    attackerLevel = parseInt(attackerLevel)
-    const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
-
-    for(let i=0; i<movesInfoArray.length; i++){
-        if (frozenOrAsleep){
-            finalDamageArray[i][0] = 0
-            finalDamageArray[i][1] = 0
-            continue
-        }
-        let minVariation = 0.01*movesBonus[i]*effectiveness[i]*85
-        let maxVariation = 0.01*movesBonus[i]*effectiveness[i]*100
-        if (movesInfoArray[i][3]==="physical"){
-            let attack = (0.2*attackerLevel+1)*attackerStats[1]*movesInfoArray[i][0]
-            let defense = 25*defenderStats[2]
-
-            finalDamageArray[i][0] = Math.floor(minVariation*((attack/defense)+2))
-            finalDamageArray[i][1] = Math.floor(maxVariation*((attack/defense)+2))
-        }
-        else if (movesInfoArray[i][3]==="special"){
-            let specialAttack = (0.2*attackerLevel+1)*attackerStats[3]*movesInfoArray[i][0]
-            let specialDefense = 25*defenderStats[4]
-
-            finalDamageArray[i][0] = Math.floor(minVariation*((specialAttack/specialDefense)+2))
-            finalDamageArray[i][1] = Math.floor(maxVariation*((specialAttack/specialDefense)+2))
+    
+    for(let i=0; i<variationDamage.length; i++){
+        if (defendingDamage[i]!==0){
+            let pureDamage = (attackDamage[i]/defendingDamage[i])+2
+            finalDamageArray[i][0] = Math.floor(variationDamage[i][0]*pureDamage)
+            finalDamageArray[i][1] = Math.floor(variationDamage[i][1]*pureDamage)
         }
         else{
             finalDamageArray[i][0] = 0
@@ -39,6 +19,54 @@ function calculateFinalDamage(attackerStats, defenderStats, attackerLevel, effec
         }
     }
     return finalDamageArray
+}
+
+function calculateVariation(movesBonus, effectiveness){
+    const variationCalculation = []
+    for(let i=0; i<movesBonus.length; i++){
+        const minVariation = 0.01*movesBonus[i]*effectiveness[i]*85
+        const maxVariation = 0.01*movesBonus[i]*effectiveness[i]*100
+        variationCalculation.push([minVariation, maxVariation])
+    }
+    return variationCalculation
+}
+
+function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, attackerStatus){
+    const attackingCalculation = []
+    const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
+
+    attackerLevel = parseInt(attackerLevel)
+    for(let i=0; i<movesInfoArray.length; i++){
+        if (frozenOrAsleep){
+            attackingCalculation.push(0)
+        }
+        else if (movesInfoArray[i][3]==="physical"){
+            attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[1]*movesInfoArray[i][0])
+        }
+        else if (movesInfoArray[i][3]==="special"){
+            attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[3]*movesInfoArray[i][0])
+        }
+        else{
+            attackingCalculation.push(0)
+        }
+    }
+    return attackingCalculation
+}
+
+function calculateDefendingValue(defenderStats, movesInfoArray){
+    const defendingCalculation = []
+    for(let i=0; i<movesInfoArray.length; i++){
+        if (movesInfoArray[i][3]==="physical"){
+            defendingCalculation.push(25*defenderStats[2])
+        }
+        else if (movesInfoArray[i][3]==="special"){
+            defendingCalculation.push(25*defenderStats[4])
+        }
+        else{
+            defendingCalculation.push(0)
+        }
+    }
+    return defendingCalculation
 }
 
 function damagePercentage(stats, finalDamage){
@@ -103,16 +131,10 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
             // Campos
             setTerrainMultipliers(activeTerrain.value, movesInfoArray, attackerStatus.value)
             // Calculo final
-            const finalDamage = calculateFinalDamage(attackerStats, 
-                                                    defenderStats, 
-                                                    attackingLevel.value,
-                                                    effectiveness, 
-                                                    movesBonus, 
-                                                    movesInfoArray,
-                                                    attackerStatus.value,
-                                                    defenderStatus.value
-                                                );
-            // Calculo en porcentajes
+            const variationDamage = calculateVariation(movesBonus, effectiveness)
+            const attackDamage = calculateAttackingValue(attackingLevel.value, attackerStats, movesInfoArray, attackerStatus.value)
+            const defendingDamage = calculateDefendingValue(defenderStats, movesInfoArray)
+            const finalDamage = calculateFinalDamage(variationDamage, attackDamage, defendingDamage);
             const finalDamagePercentage = damagePercentage(defenderStats, finalDamage);
             // Colocar calculo en el HTML
             changeDamagePanel(attackerPanel, attackerName, finalDamage, finalDamagePercentage);
