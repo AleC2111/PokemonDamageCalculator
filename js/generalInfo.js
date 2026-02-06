@@ -67,7 +67,7 @@ export function obtainPokemon(pokemonElementsHTML) {
     const movesSelectors = moves.querySelectorAll(".move-select")
     const movesInfo = moves.querySelectorAll(".move-info")
     button.addEventListener('click', async function() {
-        const url = 'https://pokeapi.co/api/v2/pokemon/'+name.value;
+        const url = 'https://pokeapi.co/api/v2/pokemon/'+(name.value).toLowerCase();
         try {
             const response = await fetch(url, {method:"GET"});
             if (!response.ok || name.value==="") {
