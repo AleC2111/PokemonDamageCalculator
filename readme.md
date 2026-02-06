@@ -4,13 +4,12 @@ Para probar el proyecto solo necesitas instalarlo y tener conexion a internet pa
 
 ## Falta por implementar
 - (damage-modifiers)
-    - Gravemente Envenenado !
-    - Daño Pasivo !
     - Trampas del campo y barreras (fieldSideModifiers)
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Objetos equipables
-    - Bayas
-    - Mineral Evolutivo
+        - Objetos competitivos comunes
+        - Bayas
+        - Mineral Evolutivo
     - Habilidades
     - Teracristalizacion
 - Propiedades de movimientos 

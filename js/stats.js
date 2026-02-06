@@ -4,24 +4,6 @@ function assignNatureValue(natureMultiplier, diminishingStat, boostingStat){
     natureMultiplier[diminishingStat]=0.9
 }
 
-export function addNatureNames(natureElement){
-    const natures = [
-        "fuerte", "huraña", "firme", "picara", "audaz",
-        "osada", "docil", "agitada", "descuidada", "relajada",
-        "modesta", "cordial", "timida", "alocada", "apacible",
-        "serena", "amable", "cauta", "extravagante", "grosera",
-        "miedosa", "activa", "alegre", "ingenua", "seria"
-    ]
-    
-    for (let i=0; i<natures.length; i++){
-        const natureName = document.createElement("option")
-        natureName.value = natures[i]
-        natureName.text = natures[i]
-
-        natureElement.appendChild(natureName)
-    }
-}
-
 export function natureValue(natureName){
     let natureMultiplier = [1, 1, 1, 1, 1]
     const attackBoosting = ["fuerte", "huraña", "firme", "picara", "audaz"]
@@ -49,21 +31,6 @@ export function natureValue(natureName){
     }
 
     return natureMultiplier
-}
-
-export function addStatusNames(statusElement){
-    const allStatusEffects = [
-        "Ninguno", "Quemado", "Paralizado", "Envenenado", 
-        "Gravemente Envenenado", "Dormido", "Congelado", "Confundido"
-    ]
-
-    for (let i=0; i<allStatusEffects.length; i++){
-        const statusName = document.createElement("option")
-        statusName.value = allStatusEffects[i]
-        statusName.text = allStatusEffects[i]
-
-        statusElement.appendChild(statusName)
-    }
 }
 
 function getStatMofications(finalStats){

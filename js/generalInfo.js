@@ -70,7 +70,7 @@ export function obtainPokemon(pokemonElementsHTML) {
         const url = 'https://pokeapi.co/api/v2/pokemon/'+name.value;
         try {
             const response = await fetch(url, {method:"GET"});
-            if (!response.ok) {
+            if (!response.ok || name.value==="") {
                 alert("Error: No existe ese pokemon")
                 throw new Error(`Error HTTP! estado: ${response.status}`);
             }

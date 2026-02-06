@@ -1,6 +1,7 @@
 import { utilSeparateColons } from "./utils.js"
 import { organizeMovesBonus, organizeMovesEffective, organizeMovesPower, 
     parseMoveInfo, getFinalStats } from "./damage-modifiers/requiredModifiers.js"
+import { statusPassiveDamage } from "./damage-modifiers/statusEffectModifiers.js"
 import { setWeatherDamageMultipliers, setWeatherDefenseMultipliers } from "./damage-modifiers/weatherModifiers.js"
 import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
 
@@ -8,14 +9,12 @@ function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
     
     for(let i=0; i<variationDamage.length; i++){
-        if (defendingDamage[i]!==0){
-            let pureDamage = (attackDamage[i]/defendingDamage[i])+2
-            finalDamageArray[i][0] = Math.floor(variationDamage[i][0]*pureDamage)
-            finalDamageArray[i][1] = Math.floor(variationDamage[i][1]*pureDamage)
-        }
-        else{
-            finalDamageArray[i][0] = 0
-            finalDamageArray[i][1] = 0
+        for(let j=0; j<variationDamage[0].length; j++){
+            if (defendingDamage[i]!==0){
+                let pureDamage = (attackDamage[i]/defendingDamage[i])+2
+                finalDamageArray[i][j] = Math.floor(variationDamage[i][0]*pureDamage)
+            }
+            else finalDamageArray[i][j] = 0;
         }
     }
     return finalDamageArray
@@ -37,7 +36,7 @@ function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, a
 
     attackerLevel = parseInt(attackerLevel)
     for(let i=0; i<movesInfoArray.length; i++){
-        if (frozenOrAsleep){
+        if (frozenOrAsleep || movesInfoArray[i][3]==="status"){
             attackingCalculation.push(0)
         }
         else if (movesInfoArray[i][3]==="physical"){
@@ -45,9 +44,6 @@ function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, a
         }
         else if (movesInfoArray[i][3]==="special"){
             attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[3]*movesInfoArray[i][0])
-        }
-        else{
-            attackingCalculation.push(0)
         }
     }
     return attackingCalculation
@@ -69,11 +65,20 @@ function calculateDefendingValue(defenderStats, movesInfoArray){
     return defendingCalculation
 }
 
+function passiveDamage(finalDamage, defenderStats, defenderStatus){
+    for(let i=0; i<finalDamage.length; i++){
+        for(let j=0; j<finalDamage[0].length; j++){
+            finalDamage[i][j] = finalDamage[i][j]+statusPassiveDamage(defenderStats[0], defenderStatus)
+        }
+    }
+}
+
 function damagePercentage(stats, finalDamage){
     let damagePercentage = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
     for(let i=0; i<finalDamage.length; i++){
-        damagePercentage[i][0] = Math.floor((finalDamage[i][0]/stats[0])*10000)/100
-        damagePercentage[i][1] = Math.floor((finalDamage[i][1]/stats[0])*10000)/100
+        for(let j=0; j<finalDamage[0].length; j++){
+            damagePercentage[i][j] = Math.floor((finalDamage[i][j]/stats[0])*10000)/100
+        }
     }
     return damagePercentage
 }
@@ -135,6 +140,7 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
             const attackDamage = calculateAttackingValue(attackingLevel.value, attackerStats, movesInfoArray, attackerStatus.value)
             const defendingDamage = calculateDefendingValue(defenderStats, movesInfoArray)
             const finalDamage = calculateFinalDamage(variationDamage, attackDamage, defendingDamage);
+            passiveDamage(finalDamage, defenderStats, defenderStatus)
             const finalDamagePercentage = damagePercentage(defenderStats, finalDamage);
             // Colocar calculo en el HTML
             changeDamagePanel(attackerPanel, attackerName, finalDamage, finalDamagePercentage);

@@ -8,10 +8,21 @@ export function applyDebuffBurnParalysis(id, currentStatus){
     return 1
 }
 
-export function poisonBurnDamage(maxLife, currentStatus){
-    const receiveDamage = currentStatus==="Quemado" || currentStatus==="Envenenado"
+function applyBadlyPoisonDamage(maxLife, currentStatus){
+    const isBadlyPoison = currentStatus.value==="Gravemente Envenenado"
+    const poisonDamageElement = currentStatus.querySelector(".badly-poison")
+    const isDefined = poisonDamageElement!==null && poisonDamageElement!==undefined
+
+    if (isBadlyPoison && isDefined){
+        return maxLife*poisonDamageElement.value
+    }
+    return 1
+}
+
+export function statusPassiveDamage(maxLife, currentStatus){
+    const receiveDamage = currentStatus.value==="Quemado" || currentStatus.value==="Envenenado"
     if(receiveDamage){
         return maxLife*(1/8)
     }
-    return 0
+    return applyBadlyPoisonDamage(maxLife, currentStatus)
 }
