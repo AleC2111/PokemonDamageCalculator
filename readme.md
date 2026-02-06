@@ -1,6 +1,6 @@
 # Calculadora de daño de Pokemon
 Este proyecto esta siendo desarrollado con el proposito de aprender a usar JavaScript puro en lo máximo posible.
-Para probar el proyecto solo necesitas instalarlo y tener conexion a internet para hacer peticiones a PokeAPI
+Para instalar y probar el proyecto solo necesitas tener conexion a internet para hacer peticiones a PokeAPI o si quieres probarlo abrir https://alec2111.github.io/PokemonDamageCalculator/
 
 ## Falta por implementar
 - (damage-modifiers)
