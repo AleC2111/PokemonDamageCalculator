@@ -10,9 +10,9 @@ function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     
     for(let i=0; i<variationDamage.length; i++){
         for(let j=0; j<variationDamage[0].length; j++){
-            if (defendingDamage[i]!==0){
+            if (defendingDamage[i]!==0 || attackDamage[i]!==0){
                 let pureDamage = (attackDamage[i]/defendingDamage[i])+2
-                finalDamageArray[i][j] = Math.floor(variationDamage[i][0]*pureDamage)
+                finalDamageArray[i][j] = Math.floor(variationDamage[i][j]*pureDamage)
             }
             else finalDamageArray[i][j] = 0;
         }
