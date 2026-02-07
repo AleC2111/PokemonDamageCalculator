@@ -6,6 +6,20 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 - (damage-modifiers)
     - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
     - Organizar las llamadas de muchos parametros en damageCalculation !
+    - Seleccionar la vida actual
+    - Casos especiales de movimientos (Otra stat en calculo, Peso, Vida, Estatus, Amistad, Baya, Objeto, Variación, etc)
+    - Propiedades de movimientos 
+        - Contacto
+        - Puños 
+        - Sonido
+        - Viento 
+        - Corte 
+        - Proyectiles 
+        - Pulsos
+        - Polvos
+        - Ataduras
+        - Danza
+        - Explosivos
     - Objetos equipables
         - Objetos competitivos comunes
         - Bayas
@@ -13,19 +27,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Habilidades
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion
-- Propiedades de movimientos 
-    - Contacto
-    - Puños 
-    - Sonido
-    - Viento 
-    - Corte 
-    - Proyectiles 
-    - Pulsos
-    - Polvos
-    - Danza
-    - Explosivos
-- Casos especiales de movimientos (Otra stat en calculo, Peso, Vida, Estatus, Amistad, Baya, Objeto, Variación, etc)
-- Tomar genero y formas alternativas (Aegislash)
 - Validaciones para precondicion y postcondicion de todo
 - Hacer más reactiva la interfaz
 - Acomodar mejor la busqueda de Pokemon
