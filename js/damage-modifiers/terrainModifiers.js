@@ -1,4 +1,9 @@
-export function setTerrainMultipliers(activeTerrainName, movesInfoArray, statusCondition){
+import { isTouchingGround } from "../utils.js"
+
+export function setTerrainMultipliers(activeTerrainName, movesInfoArray, statusCondition, userTypes){
+    if(!isTouchingGround(userTypes)){
+        return
+    }
     validateStatus(statusCondition, activeTerrainName)
     
     for(let i=0;i<movesInfoArray.length;i++){

@@ -20,3 +20,6 @@ export function utilSeparateColons(textToSeparate){
 export function utilSeparateSpaces(textToSeparate){
     return textToSeparate.split(" ").slice(1)
 }
+export function isTouchingGround(userType){
+    return !userType.includes("flying")
+}

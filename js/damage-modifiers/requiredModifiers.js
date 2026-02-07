@@ -1,7 +1,7 @@
 import { utilSeparateSpaces } from "../utils.js";
 import { applyDebuffBurnParalysis } from "./statusEffectModifiers.js";
 
-async function getTypeRelations(type, defendTypes){
+export async function getTypeRelations(type, defendTypes){
     try{
         if (type=="" || type===undefined){
             return
@@ -31,23 +31,23 @@ export function parseMoveInfo(attackingMoves, allMoveNames){
     return movesInfoArray
 }
 
-function typeDamage(relations, defendTypes, damage, effectiveness, multiplier){
-    for(let i=0; i<relations[effectiveness].length; i++){
+function typeDamage(allTypeRelations, defendTypes, damage, effectiveness){
+    for(let i=0; i<allTypeRelations[effectiveness["relation"]].length; i++){
         for(let j=0; j<defendTypes.length; j++){
-            if (defendTypes[j]===relations[effectiveness][i]["name"]){
-                damage *= multiplier
+            if (defendTypes[j]===allTypeRelations[effectiveness["relation"]][i]["name"]){
+                damage *= effectiveness["multiplier"]
             }
         }
     }
     return damage
 }
 
-function effectivenessCalculation(relations, defendTypes){
+function effectivenessCalculation(allTypeRelations, defendTypes){
     let damage = 1
 
-    damage = typeDamage(relations, defendTypes, damage, "double_damage_to", 2)
-    damage = typeDamage(relations, defendTypes, damage, "half_damage_to", 0.5)
-    damage = typeDamage(relations, defendTypes, damage, "no_damage_to", 0)
+    damage = typeDamage(allTypeRelations, defendTypes, damage, {"relation":"double_damage_to", "multiplier":2})
+    damage = typeDamage(allTypeRelations, defendTypes, damage, {"relation":"half_damage_to", "multiplier":0.5})
+    damage = typeDamage(allTypeRelations, defendTypes, damage, {"relation":"no_damage_to", "multiplier":0})
 
     return damage
 }

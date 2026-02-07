@@ -16,7 +16,7 @@ function applyBadlyPoisonDamage(maxLife, currentStatus){
     if (isBadlyPoison && isDefined){
         return maxLife*poisonDamageElement.value
     }
-    return 1
+    return 0
 }
 
 export function statusPassiveDamage(maxLife, currentStatus){

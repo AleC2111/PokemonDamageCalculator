@@ -4,7 +4,8 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 
 ## Falta por implementar
 - (damage-modifiers)
-    - Trampas del campo y barreras (fieldSideModifiers)
+    - Bug de Gravemente Envenenado al seleccionarlo muchas veces
+    - Organizar las llamadas de muchos parametros en damageCalculation
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Objetos equipables
         - Objetos competitivos comunes
@@ -26,7 +27,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 - Casos especiales de movimientos (Otra stat en calculo, Peso, Vida, Estatus, Amistad, Baya, Objeto, Variación, etc)
 - Tomar genero y formas alternativas (Aegislash)
 - Validaciones para precondicion y postcondicion de todo
-- Validaciones deben pasar a un archivo validations.js
+- Hacer más reactiva la interfaz
 - Acomodar mejor la busqueda de Pokemon
 - Que se vea más bonita la interfaz
-- Usar Web Components para dividir el html en componentes
