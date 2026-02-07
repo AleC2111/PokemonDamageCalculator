@@ -98,7 +98,8 @@ export function whichStatToAttack(movesInfoArray, moveId){
 }
 
 export function whichStatToDefend(movesInfoArray, moveId){
-    const isPsyshock = movesInfoArray[moveId][5]==="psyshock" || movesInfoArray[moveId][5]==="psystrike"
+    const isPsyshock = movesInfoArray[moveId][5]==="psyshock" || 
+    movesInfoArray[moveId][5]==="psystrike" || movesInfoArray[moveId][5]==="secret-sword"
     if (movesInfoArray[moveId][3]==="physical" || isPsyshock){
         return 2
     }

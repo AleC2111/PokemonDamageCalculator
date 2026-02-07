@@ -7,14 +7,15 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
     - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
     - Casos especiales de movimientos 
-        - Climas
-        - Campos
-        - Peso
-        - Vida
-        - Estatus
-        - Variación
-        - Velocidad
-        - Daño fijo
+        - Foul Play
+        - Climas (Meteorobola, Hydro Steam)
+        - Campos (Expanding Force, Steel Roller)
+        - Peso (Patada baja, Hierba lazo, Cuerpo Pesado, Golpe Calor)
+        - Vida (Salmuera, Erupción, Water Spout)
+        - Estatus (Imagen, Pesadilla, Devora Sueños, Carga Tóxica)
+        - Velocidad (Giro bola, Electrobola)
+        - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom)
+        - Variación (Magnitud, Psywave)
         - Objeto
         - Baya
     - Propiedades de movimientos 
