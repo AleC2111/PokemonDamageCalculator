@@ -7,11 +7,13 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
     - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
     - Casos especiales de movimientos 
-        - Otra stat en calculo
+        - Climas
+        - Campos
         - Peso
         - Vida
         - Estatus
         - Variación
+        - Velocidad
         - Daño fijo
         - Objeto
         - Baya

@@ -82,3 +82,28 @@ export async function getMoveData(movesSelectors, movesInfoElement) {
         console.log('Error:', error)
     }
 }
+
+export function whichStatToAttack(movesInfoArray, moveId){
+    const isBodyPress = movesInfoArray[moveId][5]==="body-press"
+    // Caso de Foul Play,
+    if (isBodyPress){
+        return 2
+    }
+    else if (movesInfoArray[moveId][3]==="physical"){
+        return 1
+    }
+    else if (movesInfoArray[moveId][3]==="special"){
+        return 3
+    }
+}
+
+export function whichStatToDefend(movesInfoArray, moveId){
+    const isPsyshock = movesInfoArray[moveId][5]==="psyshock" || movesInfoArray[moveId][5]==="psystrike"
+    if (movesInfoArray[moveId][3]==="physical" || isPsyshock){
+        return 2
+    }
+    else if (movesInfoArray[moveId][3]==="special"){
+        return 4
+    }
+
+}

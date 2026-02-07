@@ -6,6 +6,7 @@ import { setWeatherDamageMultipliers, setWeatherDefenseMultipliers } from "./dam
 import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
 import { setOwnFieldMultipliers, setOtherFieldMultipliers, 
     setTailwindMultiplier, setFieldPassiveDamage, isProtectActive } from "./damage-modifiers/fieldSideModifiers.js"
+import { whichStatToAttack, whichStatToDefend } from "./moves.js"
 
 function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
@@ -41,11 +42,9 @@ function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, a
         if (frozenOrAsleep || movesInfoArray[i][3]==="status"){
             attackingCalculation.push(0)
         }
-        else if (movesInfoArray[i][3]==="physical"){
-            attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[1]*movesInfoArray[i][0])
-        }
-        else if (movesInfoArray[i][3]==="special"){
-            attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[3]*movesInfoArray[i][0])
+        else {
+            let statToUse = whichStatToAttack(movesInfoArray, i)
+            attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[statToUse]*movesInfoArray[i][0])
         }
     }
     return attackingCalculation
@@ -54,14 +53,12 @@ function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, a
 function calculateDefendingValue(defenderStats, movesInfoArray){
     const defendingCalculation = []
     for(let i=0; i<movesInfoArray.length; i++){
-        if (movesInfoArray[i][3]==="physical"){
-            defendingCalculation.push(25*defenderStats[2])
-        }
-        else if (movesInfoArray[i][3]==="special"){
-            defendingCalculation.push(25*defenderStats[4])
-        }
-        else{
+        if (movesInfoArray[i][3]==="status"){
             defendingCalculation.push(0)
+        }
+        else {
+            let statToUse = whichStatToDefend(movesInfoArray, i)
+            defendingCalculation.push(25*defenderStats[statToUse])
         }
     }
     return defendingCalculation

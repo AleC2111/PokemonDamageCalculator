@@ -102,6 +102,6 @@ export function obtainPokemon(pokemonElementsHTML) {
     });
     lifeSlider.addEventListener('change', ()=>{
         lifeSliderElements[1].textContent = lifeSliderElements[0].value+"/"+lifeSliderElements[0].max
-    })
+    });
 }
 
