@@ -5,9 +5,16 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 ## Falta por implementar
 - (damage-modifiers)
     - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
-    - Organizar las llamadas de muchos parametros en damageCalculation !
-    - Seleccionar la vida actual
-    - Casos especiales de movimientos (Otra stat en calculo, Peso, Vida, Estatus, Amistad, Baya, Objeto, Variación, etc)
+    - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
+    - Casos especiales de movimientos 
+        - Otra stat en calculo
+        - Peso
+        - Vida
+        - Estatus
+        - Variación
+        - Daño fijo
+        - Objeto
+        - Baya
     - Propiedades de movimientos 
         - Contacto
         - Puños 
@@ -21,9 +28,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
         - Danza
         - Explosivos
     - Objetos equipables
-        - Objetos competitivos comunes
-        - Bayas
-        - Mineral Evolutivo
     - Habilidades
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion

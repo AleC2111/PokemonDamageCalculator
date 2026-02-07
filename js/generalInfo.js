@@ -28,20 +28,27 @@ function getBaseStats(data, stats){
     stats.textContent = "Estadisticas base: "+statsArray
 }
 
-function setFinalStats(finalStatsElement, calculatedStats){
+function setLifeSlider(calculatedStats, lifeSlider){
+    lifeSlider[0].max = calculatedStats[0]
+    lifeSlider[0].value = calculatedStats[0]
+    lifeSlider[1].textContent = lifeSlider[0].value+"/"+calculatedStats[0]
+}
+
+function setFinalStats(finalStatsElement, calculatedStats, lifeSlider){
     const everyStat = finalStatsElement.rows
     const statsNames = ["HP", "ATK", "DEF", "SP.A", "SP.D", "SPEED"]
+    setLifeSlider(calculatedStats, lifeSlider)
     for (let i=0;i<everyStat.length;i++){
         everyStat[i].cells[0].textContent = statsNames[i]+" "+calculatedStats[i]
     }
 }
 
-function getStatCalculation(data, level, natureElement, finalStats){
+function getStatCalculation(data, level, natureElement, finalStats, lifeSlider){
     try {
         if (level.value && (level.value <= 100 && level.value >= 1)){
             const natureMultiplier = natureValue(natureElement.value)
             let calculatedStats = calculatePokemonStats(level.value, data["stats"], natureMultiplier, finalStats)
-            setFinalStats(finalStats, calculatedStats)
+            setFinalStats(finalStats, calculatedStats, lifeSlider)
         }
         else{
             alert("El nivel debe tener un valor entre 1 y 100")
@@ -63,6 +70,8 @@ export function obtainPokemon(pokemonElementsHTML) {
     const natureElement = pokemonElementsHTML.querySelector(".natures")
     const finalStats = pokemonElementsHTML.querySelector(".calculated-stats")
     const moves = pokemonElementsHTML.querySelector(".all-moves")
+    const lifeSlider = pokemonElementsHTML.querySelector(".life-slider")
+    const lifeSliderElements = lifeSlider.children
 
     const movesSelectors = moves.querySelectorAll(".move-select")
     const movesInfo = moves.querySelectorAll(".move-info")
@@ -81,7 +90,7 @@ export function obtainPokemon(pokemonElementsHTML) {
             getTypes(data, types);
             getAbilities(data, abilities);
             getBaseStats(data, stats);
-            getStatCalculation(data, level, natureElement, finalStats);
+            getStatCalculation(data, level, natureElement, finalStats, lifeSliderElements);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -91,5 +100,8 @@ export function obtainPokemon(pokemonElementsHTML) {
             getMoveData(movesSelectors, movesInfo); 
         });
     });
+    lifeSlider.addEventListener('change', ()=>{
+        lifeSliderElements[1].textContent = lifeSliderElements[0].value+"/"+lifeSliderElements[0].max
+    })
 }
 
