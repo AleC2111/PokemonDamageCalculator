@@ -78,10 +78,10 @@ function fieldModifiers(finalDamage, ownFieldSide, otherFieldSide, movesInfoArra
     }
 }
 
-function iterateFieldPassiveDamage(finalDamage, ownFieldSide, attackerStats, attackerTypes){
+async function iterateFieldPassiveDamage(finalDamage, ownFieldSide, attackerStats, attackerTypes){
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
-            let passiveDamageTotal = setFieldPassiveDamage(ownFieldSide, attackerStats, attackerTypes)
+            let passiveDamageTotal = await setFieldPassiveDamage(ownFieldSide, attackerStats, attackerTypes)
             finalDamage[i][j] = finalDamage[i][j]+passiveDamageTotal
         }
     }
@@ -115,20 +115,23 @@ function changeDamagePanel(panel, pokemonName, finalDamage, finalDamagePercentag
     }
 }
 
-export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damagePanel, 
-    ownFieldSide, otherFieldSide){
-    const attackingTypes = attackingPokemonHTML.querySelector(".types")
-    const attackingLevel = attackingPokemonHTML.querySelector(".level")
-    const attackingFinalStats = attackingPokemonHTML.querySelector(".calculated-stats")
-    const attackerStatus = attackingPokemonHTML.querySelector(".status")
-    const attackingMoves = attackingPokemonHTML.querySelector(".all-moves")
+export function damageResults(allPokemonHTML, damageContext){
+    const damagePanel = damageContext[0][0]
+    const ownFieldSide = damageContext[1][0]
+    const otherFieldSide = damageContext[1][1]
+
+    const attackingTypes = allPokemonHTML[0].querySelector(".types")
+    const attackingLevel = allPokemonHTML[0].querySelector(".level")
+    const attackingFinalStats = allPokemonHTML[0].querySelector(".calculated-stats")
+    const attackerStatus = allPokemonHTML[0].querySelector(".status")
+    const attackingMoves = allPokemonHTML[0].querySelector(".all-moves")
     const moveNames = attackingMoves.querySelectorAll(".move-select")
     const moveData = attackingMoves.querySelectorAll(".move-info")
     const hitPerMove = attackingMoves.querySelectorAll(".times-hit")
 
-    const defendingTypes = defendingPokemonHTML.querySelector(".types")
-    const defendingFinalStats = defendingPokemonHTML.querySelector(".calculated-stats")
-    const defenderStatus = defendingPokemonHTML.querySelector(".status")
+    const defendingTypes = allPokemonHTML[1].querySelector(".types")
+    const defendingFinalStats = allPokemonHTML[1].querySelector(".calculated-stats")
+    const defenderStatus = allPokemonHTML[1].querySelector(".status")
     
     const activeWeather = document.querySelector(".weather")
     const activeTerrain = document.querySelector(".terrain")
@@ -139,7 +142,7 @@ export function damageResults(attackingPokemonHTML, defendingPokemonHTML, damage
                 throw new Error("Faltan valores")
             }
             const attackerPanel = damagePanel.children
-            const attackerName = attackingPokemonHTML.querySelector(".name").value
+            const attackerName = allPokemonHTML[0].querySelector(".name").value
             if (isProtectActive(otherFieldSide)){
                 const nullDamage = [[0, 0], [0, 0], [0, 0], [0, 0]]
                 changeDamagePanel(attackerPanel, attackerName, nullDamage, nullDamage);

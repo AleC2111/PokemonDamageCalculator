@@ -4,14 +4,14 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 
 ## Falta por implementar
 - (damage-modifiers)
-    - Bug de Gravemente Envenenado al seleccionarlo muchas veces
-    - Organizar las llamadas de muchos parametros en damageCalculation
-    - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
+    - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
+    - Organizar las llamadas de muchos parametros en damageCalculation !
     - Objetos equipables
         - Objetos competitivos comunes
         - Bayas
         - Mineral Evolutivo
     - Habilidades
+    - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion
 - Propiedades de movimientos 
     - Contacto

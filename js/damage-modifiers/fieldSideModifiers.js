@@ -47,7 +47,7 @@ export function setTailwindMultiplier(fieldSide){
     return 1;
 }
 
-export function setFieldPassiveDamage(fieldSide, attackerStats, attackerTypes){
+export async function setFieldPassiveDamage(fieldSide, attackerStats, attackerTypes){
     const forms = fieldSide.querySelectorAll("input:checked")
     let accumulatedPassiveDamage = 0
 
@@ -56,7 +56,7 @@ export function setFieldPassiveDamage(fieldSide, attackerStats, attackerTypes){
         accumulatedPassiveDamage += leechSeedDamage(attackerStats, attackerTypes, activeFieldHazard)
         accumulatedPassiveDamage += saltCureDamage(attackerStats, attackerTypes, activeFieldHazard)
         if(isTouchingGround(attackerTypes)){
-            accumulatedPassiveDamage += stealthRockDamage(attackerStats, attackerTypes, activeFieldHazard)
+            accumulatedPassiveDamage += await stealthRockDamage(attackerStats, attackerTypes, activeFieldHazard)
             accumulatedPassiveDamage += spikesDamage(attackerStats, forms[i])
         }
     }

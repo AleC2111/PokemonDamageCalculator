@@ -20,6 +20,17 @@ export function utilSeparateColons(textToSeparate){
 export function utilSeparateSpaces(textToSeparate){
     return textToSeparate.split(" ").slice(1)
 }
+
 export function isTouchingGround(userType){
     return !userType.includes("flying")
+}
+
+export function inverseArguments(allPokemon, damageContext){
+    const inversedPokemon = [...allPokemon].reverse()
+    const inversedContext = []
+    for(let i=0; i<damageContext.length; i++){
+        let contextArray = Array.from(damageContext[i])
+        inversedContext.push([...contextArray].reverse())
+    }
+    return {inversedPokemon: inversedPokemon, inversedContext: inversedContext}
 }
