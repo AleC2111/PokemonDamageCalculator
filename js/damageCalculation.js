@@ -7,6 +7,7 @@ import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
 import { setOwnFieldMultipliers, setOtherFieldMultipliers, 
     setTailwindMultiplier, setFieldPassiveDamage, isProtectActive } from "./damage-modifiers/fieldSideModifiers.js"
 import { whichStatToAttack, whichStatToDefend } from "./moves.js"
+import { speedDependentMoves, lifeDependentMoves } from "./damage-modifiers/moveSpecificModifiers.js"
 
 function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
@@ -125,6 +126,7 @@ export function damageResults(allPokemonHTML, damageContext){
     const attackingFinalStats = allPokemonHTML[0].querySelector(".calculated-stats")
     const attackerStatus = allPokemonHTML[0].querySelector(".status")
     const attackingMoves = allPokemonHTML[0].querySelector(".all-moves")
+    const attackerCurrentLife = allPokemonHTML[0].querySelector(".life-slider").children[0]
     const moveNames = attackingMoves.querySelectorAll(".move-select")
     const moveData = attackingMoves.querySelectorAll(".move-info")
     const hitPerMove = attackingMoves.querySelectorAll(".times-hit")
@@ -132,6 +134,7 @@ export function damageResults(allPokemonHTML, damageContext){
     const defendingTypes = allPokemonHTML[1].querySelector(".types")
     const defendingFinalStats = allPokemonHTML[1].querySelector(".calculated-stats")
     const defenderStatus = allPokemonHTML[1].querySelector(".status")
+    const defenderCurrentLife = allPokemonHTML[1].querySelector(".life-slider").children[0]
     
     const activeWeather = document.querySelector(".weather")
     const activeTerrain = document.querySelector(".terrain")
@@ -157,9 +160,11 @@ export function damageResults(allPokemonHTML, damageContext){
             const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value);
             const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value);
             attackerStats[5] = attackerStats[5]*setTailwindMultiplier(ownFieldSide);
+            defenderStats[5] = defenderStats[5]*setTailwindMultiplier(otherFieldSide);
             // Potencia
             organizeMovesPower(movesInfoArray, hitPerMove);
-            
+            speedDependentMoves(movesInfoArray, attackerStats, defenderStats)
+            lifeDependentMoves(movesInfoArray, attackerStats, defenderStats, attackerCurrentLife.value, defenderCurrentLife.value)
             // Climas
             setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
             setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defendingFinalStats)

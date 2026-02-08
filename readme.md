@@ -8,11 +8,9 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
     - Casos especiales de movimientos 
         - Cambia la potencia 
-            - Velocidad (Giro bola, Electrobola)
-            - Vida (Salmuera, Eruption, Water Spout)
-            - Estatus (Imagen, Carga Tóxica)
             - Peso (Patada baja, Hierba lazo, Cuerpo Pesado, Golpe Calor)
             - Boost de stat (Stored Power, Power Trip)
+            - Estatus (Imagen, Carga Tóxica)
         - Cambia por completo el calculo
             - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom)
             - Variación (Magnitud, Psywave, Present)
