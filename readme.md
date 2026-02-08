@@ -6,15 +6,13 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 - (damage-modifiers)
     - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
     - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
-    - Guardar datos importantes en localStorage
     - Casos especiales de movimientos 
-        - Cambia la potencia
-            - Climas (Meteorobola, Hydro Steam)
-            - Campos (Expanding Force, Steel Roller, Terrain Pulse)
+        - Cambia la potencia 
             - Velocidad (Giro bola, Electrobola)
-            - Estatus (Imagen, Carga Tóxica)
             - Vida (Salmuera, Eruption, Water Spout)
+            - Estatus (Imagen, Carga Tóxica)
             - Peso (Patada baja, Hierba lazo, Cuerpo Pesado, Golpe Calor)
+            - Boost de stat (Stored Power, Power Trip)
         - Cambia por completo el calculo
             - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom)
             - Variación (Magnitud, Psywave, Present)

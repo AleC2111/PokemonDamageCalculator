@@ -7,12 +7,21 @@ export function setTerrainMultipliers(activeTerrainName, movesInfoArray, statusC
     validateStatus(statusCondition, activeTerrainName)
     
     for(let i=0;i<movesInfoArray.length;i++){
+        let moveName = movesInfoArray[i][5]
         if (activeTerrainName==="none"){
+            if(moveName==="steel-roller"){
+                movesInfoArray[i][0] = 0
+            }
             continue
         }
+        if(moveName==="expanding-force" && activeTerrainName==="psychic"){
+            movesInfoArray[i][0] = 120
+            continue
+        }
+        tarrainPulseCase(activeTerrainName, movesInfoArray, iterator)
+
         let moveType = movesInfoArray[i][2]
         let movePriority = movesInfoArray[i][4]
-        let moveName = movesInfoArray[i][5]
         let isGrassType = moveType==="grass"
         let isElectricType = moveType==="electric"
         let isDragonType = moveType==="dragon"
@@ -54,6 +63,27 @@ function negatePriorityDamage(movePriority, activeTerrainName){
         return 0
     }
     return 1
+}
+
+function tarrainPulseCase(activeTerrainName, movesInfoArray, iterator){
+    if (movesInfoArray[i][5]==="tarrain-pulse"){
+        if(activeTerrainName==="grassy"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "grass"
+        }
+        if(activeTerrainName==="electric"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "electric"
+        }
+        if(activeTerrainName==="misty"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "fairy"
+        }
+        if(activeTerrainName==="psychic"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "psychic"
+        }
+    }
 }
 
 function validateStatus(statusCondition, activeTerrainName){

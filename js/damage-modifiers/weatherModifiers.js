@@ -3,6 +3,12 @@ export function setWeatherDamageMultipliers(activeClimateName, movesInfoArray, d
         if (activeClimateName==="none"){
             continue
         }
+        if(movesInfoArray[i][5]==="hydro-steam" && activeClimateName==="sun"){
+            movesInfoArray[i][0] = 120
+            continue
+        }
+        weatherBallCase(activeClimateName, movesInfoArray, iterator)
+
         let moveType = movesInfoArray[i][2]
         let isWaterType = moveType==="water"
         let isFireType = moveType==="fire"
@@ -56,6 +62,27 @@ function strongWindsDamageReduction(moveType, activeClimateName, defenderTypes){
         }
     }
     return 1
+}
+
+function weatherBallCase(activeClimateName, movesInfoArray, iterator){
+    if (movesInfoArray[i][5]==="weather-ball"){
+        if(activeClimateName==="sun" || activeClimateName==="harsh-sun"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "fire"
+        }
+        if(activeClimateName==="rain" || activeClimateName==="heavy-rain"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "water"
+        }
+        if(activeClimateName==="sandstorm"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "rock"
+        }
+        if(activeClimateName==="snow"){
+            movesInfoArray[iterator][0] *= 2
+            movesInfoArray[iterator][2] = "ice"
+        }
+    }
 }
 
 export function setWeatherDefenseMultipliers(activeClimateName, defenderTypes, defendingFinalStats){

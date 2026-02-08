@@ -153,21 +153,22 @@ export function damageResults(allPokemonHTML, damageContext){
             const otherTypes = utilSeparateColons(defendingTypes.textContent);
             // Movimientos
             const movesInfoArray = parseMoveInfo(moveData, moveNames);
-            // Efectividad
-            const effectiveness = await organizeMovesEffective(movesInfoArray, otherTypes);
             // Estadisticas
             const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value);
             const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value);
             attackerStats[5] = attackerStats[5]*setTailwindMultiplier(ownFieldSide);
-            // STAB
-            const movesBonus = organizeMovesBonus(movesInfoArray, ownTypes);
             // Potencia
             organizeMovesPower(movesInfoArray, hitPerMove);
+            
             // Climas
             setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
             setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defendingFinalStats)
             // Campos
             setTerrainMultipliers(activeTerrain.value, movesInfoArray, attackerStatus.value, ownTypes)
+            // Efectividad
+            const effectiveness = await organizeMovesEffective(movesInfoArray, otherTypes);
+            // STAB
+            const movesBonus = organizeMovesBonus(movesInfoArray, ownTypes);
             // Calculo final
             const variationDamage = calculateVariation(movesBonus, effectiveness)
             const attackDamage = calculateAttackingValue(attackingLevel.value, attackerStats, movesInfoArray, attackerStatus.value, defenderStats)
