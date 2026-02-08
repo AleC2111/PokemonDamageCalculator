@@ -5,15 +5,13 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 ## Falta por implementar
 - (damage-modifiers)
     - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
-    - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
+    - Organizar las llamadas de muchos parametros con Objects
     - Casos especiales de movimientos 
         - Cambia la potencia 
-            - Peso (Patada baja, Hierba lazo, Cuerpo Pesado, Golpe Calor)
-            - Boost de stat (Stored Power, Power Trip)
             - Estatus (Imagen, Carga Tóxica)
+            - Boost de stat (Stored Power, Power Trip)
         - Cambia por completo el calculo
             - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom)
-            - Variación (Magnitud, Psywave, Present)
     - Objetos equipables
         - Casos especiales de movimientos
     - Habilidades

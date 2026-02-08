@@ -7,7 +7,7 @@ import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
 import { setOwnFieldMultipliers, setOtherFieldMultipliers, 
     setTailwindMultiplier, setFieldPassiveDamage, isProtectActive } from "./damage-modifiers/fieldSideModifiers.js"
 import { whichStatToAttack, whichStatToDefend } from "./moves.js"
-import { speedDependentMoves, lifeDependentMoves } from "./damage-modifiers/moveSpecificModifiers.js"
+import { speedDependentMoves, lifeDependentMoves, weightDependentMoves } from "./damage-modifiers/moveSpecificModifiers.js"
 
 function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
@@ -127,6 +127,7 @@ export function damageResults(allPokemonHTML, damageContext){
     const attackerStatus = allPokemonHTML[0].querySelector(".status")
     const attackingMoves = allPokemonHTML[0].querySelector(".all-moves")
     const attackerCurrentLife = allPokemonHTML[0].querySelector(".life-slider").children[0]
+    const attackerWeight = allPokemonHTML[0].querySelector(".weight")
     const moveNames = attackingMoves.querySelectorAll(".move-select")
     const moveData = attackingMoves.querySelectorAll(".move-info")
     const hitPerMove = attackingMoves.querySelectorAll(".times-hit")
@@ -135,6 +136,7 @@ export function damageResults(allPokemonHTML, damageContext){
     const defendingFinalStats = allPokemonHTML[1].querySelector(".calculated-stats")
     const defenderStatus = allPokemonHTML[1].querySelector(".status")
     const defenderCurrentLife = allPokemonHTML[1].querySelector(".life-slider").children[0]
+    const defenderWeight = allPokemonHTML[1].querySelector(".weight")
     
     const activeWeather = document.querySelector(".weather")
     const activeTerrain = document.querySelector(".terrain")
@@ -165,6 +167,7 @@ export function damageResults(allPokemonHTML, damageContext){
             organizeMovesPower(movesInfoArray, hitPerMove);
             speedDependentMoves(movesInfoArray, attackerStats, defenderStats)
             lifeDependentMoves(movesInfoArray, attackerStats, defenderStats, attackerCurrentLife.value, defenderCurrentLife.value)
+            weightDependentMoves(movesInfoArray, attackerWeight, defenderWeight)
             // Climas
             setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
             setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defendingFinalStats)

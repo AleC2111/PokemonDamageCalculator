@@ -34,6 +34,10 @@ function setLifeSlider(calculatedStats, lifeSlider){
     lifeSlider[1].textContent = lifeSlider[0].value+"/"+calculatedStats[0]
 }
 
+function getWeigth(data, weightElement){
+    weightElement.textContent = data["weight"]/10
+}
+
 function setFinalStats(finalStatsElement, calculatedStats, lifeSlider){
     const everyStat = finalStatsElement.rows
     const statsNames = ["HP", "ATK", "DEF", "SP.A", "SP.D", "SPEED"]
@@ -70,6 +74,7 @@ export function obtainPokemon(pokemonElementsHTML) {
     const natureElement = pokemonElementsHTML.querySelector(".natures")
     const finalStats = pokemonElementsHTML.querySelector(".calculated-stats")
     const moves = pokemonElementsHTML.querySelector(".all-moves")
+    const weight = pokemonElementsHTML.querySelector(".weight")
     const lifeSlider = pokemonElementsHTML.querySelector(".life-slider")
     const lifeSliderElements = lifeSlider.children
 
@@ -89,6 +94,7 @@ export function obtainPokemon(pokemonElementsHTML) {
             getMoveData(movesSelectors, movesInfo); 
             getTypes(data, types);
             getAbilities(data, abilities);
+            getWeigth(data, weight)
             getBaseStats(data, stats);
             getStatCalculation(data, level, natureElement, finalStats, lifeSliderElements);
         } catch (error) {
