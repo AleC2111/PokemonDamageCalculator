@@ -33,7 +33,7 @@ function calculateVariation(movesBonus, effectiveness){
     return variationCalculation
 }
 
-function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, attackerStatus){
+function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, attackerStatus, defenderStats){
     const attackingCalculation = []
     const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
 
@@ -41,6 +41,9 @@ function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, a
     for(let i=0; i<movesInfoArray.length; i++){
         if (frozenOrAsleep || movesInfoArray[i][3]==="status"){
             attackingCalculation.push(0)
+        }
+        if (movesInfoArray[i][5]==="foul-play"){
+            attackingCalculation.push((0.2*attackerLevel+1)*defenderStats[1]*movesInfoArray[i][0])
         }
         else {
             let statToUse = whichStatToAttack(movesInfoArray, i)
@@ -167,7 +170,7 @@ export function damageResults(allPokemonHTML, damageContext){
             setTerrainMultipliers(activeTerrain.value, movesInfoArray, attackerStatus.value, ownTypes)
             // Calculo final
             const variationDamage = calculateVariation(movesBonus, effectiveness)
-            const attackDamage = calculateAttackingValue(attackingLevel.value, attackerStats, movesInfoArray, attackerStatus.value)
+            const attackDamage = calculateAttackingValue(attackingLevel.value, attackerStats, movesInfoArray, attackerStatus.value, defenderStats)
             const defendingDamage = calculateDefendingValue(defenderStats, movesInfoArray)
             const finalDamage = calculateFinalDamage(variationDamage, attackDamage, defendingDamage);
             // Modificadores de daño y daño pasivo

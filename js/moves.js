@@ -85,7 +85,6 @@ export async function getMoveData(movesSelectors, movesInfoElement) {
 
 export function whichStatToAttack(movesInfoArray, moveId){
     const isBodyPress = movesInfoArray[moveId][5]==="body-press"
-    // Caso de Foul Play,
     if (isBodyPress){
         return 2
     }

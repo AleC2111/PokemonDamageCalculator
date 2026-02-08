@@ -8,8 +8,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Organizar las llamadas de muchos parametros en damageCalculation y generalInfo !
     - Guardar datos importantes en localStorage
     - Casos especiales de movimientos 
-        - Moidifica que stat usa
-            - Foul Play
         - Cambia la potencia
             - Climas (Meteorobola, Hydro Steam)
             - Campos (Expanding Force, Steel Roller, Terrain Pulse)
