@@ -84,7 +84,7 @@ export function organizeMovesPower(movesInfoArray, hitPerMove){
     }
 }
 
-export function getFinalStats(statElement, currentStatus){
+export function getFinalStats(statElement, currentStatus, tailwindMultiplier){
     const everyStat = statElement.rows
     let parsedValues = [0, 0, 0, 0, 0, 0]
     for (let i=0;i<everyStat.length;i++){
@@ -94,9 +94,8 @@ export function getFinalStats(statElement, currentStatus){
             let statChanges = parseFloat(everyStat[i].cells[3].children[0].value);
             parsedValues[i] = getStatValue*statChanges*applyDebuffBurnParalysis(i, currentStatus);
         }
-        else {
-            parsedValues[i] = getStatValue;
-        }
+        else parsedValues[i] = getStatValue;
     }
+    parsedValues[5] *= tailwindMultiplier
     return parsedValues
 }

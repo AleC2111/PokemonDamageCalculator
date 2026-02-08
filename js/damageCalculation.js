@@ -8,13 +8,15 @@ import { setOwnFieldMultipliers, setOtherFieldMultipliers,
     setTailwindMultiplier, setFieldPassiveDamage, isProtectActive } from "./damage-modifiers/fieldSideModifiers.js"
 import { whichStatToAttack, whichStatToDefend } from "./moves.js"
 import { speedDependentMoves, lifeDependentMoves, weightDependentMoves } from "./damage-modifiers/moveSpecificModifiers.js"
+import { PokemonDataBuilder } from "./objects/PokemonDataBuilder.js"
+import { PokemonData } from "./objects/PokemonData.js"
 
 function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
     
     for(let i=0; i<variationDamage.length; i++){
         for(let j=0; j<variationDamage[0].length; j++){
-            if (defendingDamage[i]!==0 || attackDamage[i]!==0){
+            if (defendingDamage[i]!==0 && attackDamage[i]!==0){
                 let pureDamage = (attackDamage[i]/defendingDamage[i])+2
                 finalDamageArray[i][j] = Math.floor(variationDamage[i][j]*pureDamage)
             }
@@ -38,7 +40,6 @@ function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, a
     const attackingCalculation = []
     const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
 
-    attackerLevel = parseInt(attackerLevel)
     for(let i=0; i<movesInfoArray.length; i++){
         if (frozenOrAsleep || movesInfoArray[i][3]==="status"){
             attackingCalculation.push(0)
@@ -68,12 +69,12 @@ function calculateDefendingValue(defenderStats, movesInfoArray){
     return defendingCalculation
 }
 
-function fieldModifiers(finalDamage, ownFieldSide, otherFieldSide, movesInfoArray){
+function fieldModifiers(finalDamage, fieldSides,  movesInfoArray){
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
-            finalDamage[i][j] = finalDamage[i][j]*setOwnFieldMultipliers(ownFieldSide);
+            finalDamage[i][j] = finalDamage[i][j]*setOwnFieldMultipliers(fieldSides[0]);
             for(let k=0;k<movesInfoArray; k++){
-                finalDamage[i][j] = finalDamage[i][j]*setOtherFieldMultipliers(otherFieldSide, movesInfoArray[k][3]);
+                finalDamage[i][j] = finalDamage[i][j]*setOtherFieldMultipliers(fieldSides[1], movesInfoArray[k][3]);
             }
         }     
     }
@@ -118,16 +119,15 @@ function changeDamagePanel(panel, pokemonName, finalDamage, finalDamagePercentag
 
 export function damageResults(allPokemonHTML, damageContext){
     const damagePanel = damageContext[0][0]
-    const ownFieldSide = damageContext[1][0]
-    const otherFieldSide = damageContext[1][1]
+    const fieldSides = damageContext[1]
 
     const attackingTypes = allPokemonHTML[0].querySelector(".types")
-    const attackingLevel = allPokemonHTML[0].querySelector(".level")
     const attackingFinalStats = allPokemonHTML[0].querySelector(".calculated-stats")
     const attackerStatus = allPokemonHTML[0].querySelector(".status")
-    const attackingMoves = allPokemonHTML[0].querySelector(".all-moves")
     const attackerCurrentLife = allPokemonHTML[0].querySelector(".life-slider").children[0]
     const attackerWeight = allPokemonHTML[0].querySelector(".weight")
+    const attackingLevel = allPokemonHTML[0].querySelector(".level")
+    const attackingMoves = allPokemonHTML[0].querySelector(".all-moves")
     const moveNames = attackingMoves.querySelectorAll(".move-select")
     const moveData = attackingMoves.querySelectorAll(".move-info")
     const hitPerMove = attackingMoves.querySelectorAll(".times-hit")
@@ -143,12 +143,13 @@ export function damageResults(allPokemonHTML, damageContext){
     const confirmButton = document.getElementById("confirm-damage")
     confirmButton.addEventListener('click', async function() {
         try{
+            // Implementar objeto con su builder
             if(!attackingFinalStats.rows[0].cells[0].textContent || !defendingFinalStats.rows[0].cells[0].textContent){
                 throw new Error("Faltan valores")
             }
             const attackerPanel = damagePanel.children
             const attackerName = allPokemonHTML[0].querySelector(".name").value
-            if (isProtectActive(otherFieldSide)){
+            if (isProtectActive(fieldSides[1])){
                 const nullDamage = [[0, 0], [0, 0], [0, 0], [0, 0]]
                 changeDamagePanel(attackerPanel, attackerName, nullDamage, nullDamage);
                 return
@@ -159,18 +160,16 @@ export function damageResults(allPokemonHTML, damageContext){
             // Movimientos
             const movesInfoArray = parseMoveInfo(moveData, moveNames);
             // Estadisticas
-            const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value);
-            const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value);
-            attackerStats[5] = attackerStats[5]*setTailwindMultiplier(ownFieldSide);
-            defenderStats[5] = defenderStats[5]*setTailwindMultiplier(otherFieldSide);
+            const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value, setTailwindMultiplier(fieldSides[0]));
+            const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value, setTailwindMultiplier(fieldSides[1]));
             // Potencia
             organizeMovesPower(movesInfoArray, hitPerMove);
             speedDependentMoves(movesInfoArray, attackerStats, defenderStats)
-            lifeDependentMoves(movesInfoArray, attackerStats, defenderStats, attackerCurrentLife.value, defenderCurrentLife.value)
-            weightDependentMoves(movesInfoArray, attackerWeight, defenderWeight)
+            lifeDependentMoves(movesInfoArray, attackerStats, defenderStats, parseInt(attackerCurrentLife.value), parseInt(defenderCurrentLife.value))
+            weightDependentMoves(movesInfoArray, parseInt(attackerWeight.textContent), parseInt(defenderWeight.textContent))
             // Climas
             setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
-            setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defendingFinalStats)
+            setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defenderStats)
             // Campos
             setTerrainMultipliers(activeTerrain.value, movesInfoArray, attackerStatus.value, ownTypes)
             // Efectividad
@@ -179,13 +178,13 @@ export function damageResults(allPokemonHTML, damageContext){
             const movesBonus = organizeMovesBonus(movesInfoArray, ownTypes);
             // Calculo final
             const variationDamage = calculateVariation(movesBonus, effectiveness)
-            const attackDamage = calculateAttackingValue(attackingLevel.value, attackerStats, movesInfoArray, attackerStatus.value, defenderStats)
+            const attackDamage = calculateAttackingValue(parseInt(attackingLevel.value), attackerStats, movesInfoArray, attackerStatus.value, defenderStats)
             const defendingDamage = calculateDefendingValue(defenderStats, movesInfoArray)
             const finalDamage = calculateFinalDamage(variationDamage, attackDamage, defendingDamage);
             // Modificadores de daño y daño pasivo
-            fieldModifiers(finalDamage, ownFieldSide, otherFieldSide, movesInfoArray)
+            fieldModifiers(finalDamage, fieldSides, movesInfoArray)
             iterateStatusPassiveDamage(finalDamage, defenderStats, defenderStatus);
-            iterateFieldPassiveDamage(finalDamage, ownFieldSide, attackerStats, ownTypes);
+            iterateFieldPassiveDamage(finalDamage, fieldSides[0], attackerStats, ownTypes);
             // Colocar calculo final en la página
             const finalDamagePercentage = damagePercentage(defenderStats, finalDamage);
             changeDamagePanel(attackerPanel, attackerName, finalDamage, finalDamagePercentage);

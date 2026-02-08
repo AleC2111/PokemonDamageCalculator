@@ -8,6 +8,7 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Organizar las llamadas de muchos parametros con Objects
     - Casos especiales de movimientos 
         - Cambia la potencia 
+            - Depende del orden (Payback, Avalanche)
             - Estatus (Imagen, Carga Tóxica)
             - Boost de stat (Stored Power, Power Trip)
         - Cambia por completo el calculo
