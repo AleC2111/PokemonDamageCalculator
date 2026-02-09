@@ -6,7 +6,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 - (damage-modifiers)
     - Gravemente Envenenado (Bug, Implementación correcta) !
     - No disminuir ataque para Facade !
-    - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom) !
     - Objetos equipables
     - Casos especiales de movimientos para objetos
     - Habilidades

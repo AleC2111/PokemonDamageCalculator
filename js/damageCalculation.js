@@ -10,12 +10,18 @@ import { whichStatToAttack, whichStatToDefend } from "./moves.js"
 import { speedDependentMoves, lifeDependentMoves, weightDependentMoves,
     statChangeDependentPower, statusConditionDependentPower } from "./damage-modifiers/moveSpecificModifiers.js"
 
-function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
+function calculateFinalDamage(variationDamage, AttackerData, DefenderData){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
-    
+    const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom"]
+    const attackDamage = calculateAttackingValue(AttackerData, DefenderData.stats);
+    const defendingDamage = calculateDefendingValue(DefenderData.stats, AttackerData.moves);
+
     for(let i=0; i<variationDamage.length; i++){
         for(let j=0; j<variationDamage[0].length; j++){
-            if (defendingDamage[i]!==0 && attackDamage[i]!==0){
+            if(fixedDamageMoves.includes(AttackerData.move[i][5])){
+                finalDamageArray[i][j] = fixedDamage(moveName, AttackerData.level)
+            }
+            else if (defendingDamage[i]!==0 && attackDamage[i]!==0){
                 let pureDamage = (attackDamage[i]/defendingDamage[i])+2
                 finalDamageArray[i][j] = Math.floor(variationDamage[i][j]*pureDamage)
             }
@@ -23,6 +29,12 @@ function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
         }
     }
     return finalDamageArray
+}
+
+function fixedDamage(moveName, attackerLevel){
+    if(moveName==="seismic-toss" || moveName==="night-shade") return attackerLevel;
+    if(moveName==="dragon-rage") return 40;
+    if(moveName==="sonic-boom") return 20;
 }
 
 function calculateVariation(movesBonus, effectiveness){
@@ -212,9 +224,7 @@ export function damageResults(allPokemonHTML, damageContext){
             const movesBonus = organizeMovesBonus(AttackerData);
             // Calculo final
             const variationDamage = calculateVariation(movesBonus, effectiveness);
-            const attackDamage = calculateAttackingValue(AttackerData, DefenderData.stats);
-            const defendingDamage = calculateDefendingValue(DefenderData.stats, AttackerData.moves);
-            const finalDamage = calculateFinalDamage(variationDamage, attackDamage, defendingDamage);
+            const finalDamage = calculateFinalDamage(variationDamage, AttackerData, DefenderData);
             // Modificadores de daño y daño pasivo
             fieldModifiers(finalDamage, fieldSides, AttackerData.moves);
             iterateStatusPassiveDamage(finalDamage, DefenderData);
