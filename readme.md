@@ -4,8 +4,7 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 
 ## Falta por implementar
 - (damage-modifiers)
-    - Bug de Gravemente Envenenado al seleccionarlo muchas veces !
-    - Organizar las llamadas de muchos parametros con Objects
+    - Gravemente Envenenado (Bug, Implementación correcta) !
     - Casos especiales de movimientos 
         - Cambia la potencia 
             - Depende del orden (Payback, Avalanche)

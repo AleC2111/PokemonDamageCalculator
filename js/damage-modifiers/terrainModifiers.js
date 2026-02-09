@@ -1,27 +1,30 @@
 import { isTouchingGround } from "../utils.js"
 
-export function setTerrainMultipliers(activeTerrainName, movesInfoArray, statusCondition, userTypes){
+export function setTerrainMultipliers(activeTerrainName, AttackerData){
+    const statusCondition = AttackerData.status
+    const userTypes = AttackerData.types
+
     if(!isTouchingGround(userTypes)){
         return
     }
     validateStatus(statusCondition, activeTerrainName)
     
-    for(let i=0;i<movesInfoArray.length;i++){
-        let moveName = movesInfoArray[i][5]
+    for(let i=0;i<AttackerData.moves.length;i++){
+        let moveName = AttackerData.moves[i][5]
         if (activeTerrainName==="none"){
             if(moveName==="steel-roller"){
-                movesInfoArray[i][0] = 0
+                AttackerData.moves[i][0] = 0
             }
             continue
         }
         if(moveName==="expanding-force" && activeTerrainName==="psychic"){
-            movesInfoArray[i][0] = 120
+            AttackerData.moves[i][0] = 120
             continue
         }
-        tarrainPulseCase(activeTerrainName, movesInfoArray, iterator)
+        tarrainPulseCase(activeTerrainName, AttackerData.moves, iterator)
 
-        let moveType = movesInfoArray[i][2]
-        let movePriority = movesInfoArray[i][4]
+        let moveType = AttackerData.moves[i][2]
+        let movePriority = AttackerData.moves[i][4]
         let isGrassType = moveType==="grass"
         let isElectricType = moveType==="electric"
         let isDragonType = moveType==="dragon"
@@ -35,12 +38,12 @@ export function setTerrainMultipliers(activeTerrainName, movesInfoArray, statusC
         let grassyDecrease = terrainDamageReduction(isGroundMove, activeTerrainName, "grassy")
         let psychicNegatePriority = negatePriorityDamage(movePriority, activeTerrainName)
 
-        movesInfoArray[i][0] = movesInfoArray[i][0]*grassyBoost
-        movesInfoArray[i][0] = movesInfoArray[i][0]*electricBoost
-        movesInfoArray[i][0] = movesInfoArray[i][0]*mistyDecrease
-        movesInfoArray[i][0] = movesInfoArray[i][0]*psychicBoost
-        movesInfoArray[i][0] = movesInfoArray[i][0]*grassyDecrease
-        movesInfoArray[i][0] = movesInfoArray[i][0]*psychicNegatePriority
+        AttackerData.moves[i][0] *= grassyBoost
+        AttackerData.moves[i][0] *= electricBoost
+        AttackerData.moves[i][0] *= mistyDecrease
+        AttackerData.moves[i][0] *= psychicBoost
+        AttackerData.moves[i][0] *= grassyDecrease
+        AttackerData.moves[i][0] *= psychicNegatePriority
     }
 }
 

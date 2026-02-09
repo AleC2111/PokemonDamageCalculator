@@ -69,8 +69,11 @@ export async function organizeMovesEffective(movesInfoArray, defendTypes){
     return allMovesArray
 }
 
-export function organizeMovesBonus(movesInfoArray, attackerTypes){
+export function organizeMovesBonus(AttackerData){
+    const movesInfoArray = AttackerData.moves
+    const attackerTypes = AttackerData.types
     let allMovesArray = []
+    
     for(let i=0; i<movesInfoArray.length; i++){
         let bonusPower = sameTypeBonus(movesInfoArray[i][2], attackerTypes)
         allMovesArray.push(bonusPower)

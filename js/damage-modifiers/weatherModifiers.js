@@ -22,13 +22,13 @@ export function setWeatherDamageMultipliers(activeClimateName, movesInfoArray, d
         let harshSunCancelDamage = weatherCancelDamage(isWaterType, activeClimateName, "harsh-sun", isStatusMove)
         let heavyRainCancelDamage = weatherCancelDamage(isFireType, activeClimateName, "heavy-rain", isStatusMove)
         
-        movesInfoArray[i][0] = movesInfoArray[i][0]*sunDamageBoost
-        movesInfoArray[i][0] = movesInfoArray[i][0]*rainDamageBoost
-        movesInfoArray[i][0] = movesInfoArray[i][0]*sunDamageReduction
-        movesInfoArray[i][0] = movesInfoArray[i][0]*rainDamageReduction
-        movesInfoArray[i][0] = movesInfoArray[i][0]*strongWindsReduction
-        movesInfoArray[i][0] = movesInfoArray[i][0]*harshSunCancelDamage
-        movesInfoArray[i][0] = movesInfoArray[i][0]*heavyRainCancelDamage
+        movesInfoArray[i][0] *= sunDamageBoost
+        movesInfoArray[i][0] *= rainDamageBoost
+        movesInfoArray[i][0] *= sunDamageReduction
+        movesInfoArray[i][0] *= rainDamageReduction
+        movesInfoArray[i][0] *= strongWindsReduction
+        movesInfoArray[i][0] *= harshSunCancelDamage
+        movesInfoArray[i][0] *= heavyRainCancelDamage
     }
 }
 
@@ -85,7 +85,9 @@ function weatherBallCase(activeClimateName, movesInfoArray, iterator){
     }
 }
 
-export function setWeatherDefenseMultipliers(activeClimateName, defenderTypes, defendingFinalStats){
+export function setWeatherDefenseMultipliers(activeClimateName, DefenderData){
+    const defenderTypes = DefenderData.types
+
     for (let i=0; i<defenderTypes.length; i++){
         if (activeClimateName==="none"){
             continue
@@ -95,7 +97,7 @@ export function setWeatherDefenseMultipliers(activeClimateName, defenderTypes, d
         let sandDefenseBoost = weatherBoost(isRockType, activeClimateName, "sand")
         let snowDefenseBoost = weatherBoost(isIceType, activeClimateName, "snow")
 
-        defendingFinalStats[4] = defendingFinalStats[4]*sandDefenseBoost
-        defendingFinalStats[2] = defendingFinalStats[2]*snowDefenseBoost
+        DefenderData.stats[4] *= sandDefenseBoost
+        DefenderData.stats[2] *= snowDefenseBoost
     }
 }

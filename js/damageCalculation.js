@@ -4,12 +4,10 @@ import { organizeMovesBonus, organizeMovesEffective, organizeMovesPower,
 import { statusPassiveDamage } from "./damage-modifiers/statusEffectModifiers.js"
 import { setWeatherDamageMultipliers, setWeatherDefenseMultipliers } from "./damage-modifiers/weatherModifiers.js"
 import { setTerrainMultipliers } from "./damage-modifiers/terrainModifiers.js"
-import { setOwnFieldMultipliers, setOtherFieldMultipliers, 
-    setTailwindMultiplier, setFieldPassiveDamage, isProtectActive } from "./damage-modifiers/fieldSideModifiers.js"
+import { setOwnFieldMultipliers, setOtherFieldMultipliers, setTailwindMultiplier, 
+    setFieldPassiveDamage, isProtectActive } from "./damage-modifiers/fieldSideModifiers.js"
 import { whichStatToAttack, whichStatToDefend } from "./moves.js"
 import { speedDependentMoves, lifeDependentMoves, weightDependentMoves } from "./damage-modifiers/moveSpecificModifiers.js"
-import { PokemonDataBuilder } from "./objects/PokemonDataBuilder.js"
-import { PokemonData } from "./objects/PokemonData.js"
 
 function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
     let finalDamageArray = [["min", "max"], ["min", "max"], ["min", "max"], ["min", "max"]]
@@ -28,6 +26,7 @@ function calculateFinalDamage(variationDamage, attackDamage, defendingDamage){
 
 function calculateVariation(movesBonus, effectiveness){
     const variationCalculation = []
+
     for(let i=0; i<movesBonus.length; i++){
         const minVariation = 0.01*movesBonus[i]*effectiveness[i]*85
         const maxVariation = 0.01*movesBonus[i]*effectiveness[i]*100
@@ -36,9 +35,13 @@ function calculateVariation(movesBonus, effectiveness){
     return variationCalculation
 }
 
-function calculateAttackingValue(attackerLevel, attackerStats, movesInfoArray, attackerStatus, defenderStats){
-    const attackingCalculation = []
+function calculateAttackingValue(AttackerData, defenderStats){
+    const attackerLevel = AttackerData.level
+    const attackerStats = AttackerData.stats
+    const movesInfoArray = AttackerData.moves
+    const attackerStatus = AttackerData.status
     const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
+    const attackingCalculation = []
 
     for(let i=0; i<movesInfoArray.length; i++){
         if (frozenOrAsleep || movesInfoArray[i][3]==="status"){
@@ -80,7 +83,10 @@ function fieldModifiers(finalDamage, fieldSides,  movesInfoArray){
     }
 }
 
-async function iterateFieldPassiveDamage(finalDamage, ownFieldSide, attackerStats, attackerTypes){
+async function iterateFieldPassiveDamage(finalDamage, ownFieldSide, AttackerData){
+    const attackerStats = AttackerData.stats
+    const attackerTypes = AttackerData.types
+    
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
             let passiveDamageTotal = await setFieldPassiveDamage(ownFieldSide, attackerStats, attackerTypes)
@@ -89,7 +95,10 @@ async function iterateFieldPassiveDamage(finalDamage, ownFieldSide, attackerStat
     }
 }
 
-function iterateStatusPassiveDamage(finalDamage, defenderStats, defenderStatus){
+function iterateStatusPassiveDamage(finalDamage, DefenderData){
+    const defenderStats = DefenderData.stats
+    const defenderStatus = DefenderData.status
+
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
             let passiveDamageTotal = statusPassiveDamage(defenderStats[0], defenderStatus)
@@ -162,31 +171,48 @@ export function damageResults(allPokemonHTML, damageContext){
             // Estadisticas
             const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value, setTailwindMultiplier(fieldSides[0]));
             const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value, setTailwindMultiplier(fieldSides[1]));
+            
+            const AttackerData = {
+                level: parseInt(attackingLevel.value),
+                stats: attackerStats,
+                moves: movesInfoArray,
+                types: ownTypes,
+                status: attackerStatus.value,
+                weight: parseInt(attackerWeight.textContent),
+                current_life: parseInt(attackerCurrentLife.value)
+            }
+            const DefenderData = {
+                types: otherTypes,
+                stats: defenderStats,
+                weight: parseInt(defenderWeight.textContent),
+                status: defenderStatus.value,
+                current_life: parseInt(defenderCurrentLife.value)
+            }
             // Potencia
-            organizeMovesPower(movesInfoArray, hitPerMove);
-            speedDependentMoves(movesInfoArray, attackerStats, defenderStats)
-            lifeDependentMoves(movesInfoArray, attackerStats, defenderStats, parseInt(attackerCurrentLife.value), parseInt(defenderCurrentLife.value))
-            weightDependentMoves(movesInfoArray, parseInt(attackerWeight.textContent), parseInt(defenderWeight.textContent))
+            organizeMovesPower(AttackerData.moves, hitPerMove);
+            speedDependentMoves(AttackerData, DefenderData.stats)
+            lifeDependentMoves(AttackerData, DefenderData)
+            weightDependentMoves(AttackerData, DefenderData)
             // Climas
-            setWeatherDamageMultipliers(activeWeather.value, movesInfoArray, defendingTypes)
-            setWeatherDefenseMultipliers(activeWeather.value, defendingTypes, defenderStats)
+            setWeatherDamageMultipliers(activeWeather.value, AttackerData.moves, DefenderData.types)
+            setWeatherDefenseMultipliers(activeWeather.value, DefenderData)
             // Campos
-            setTerrainMultipliers(activeTerrain.value, movesInfoArray, attackerStatus.value, ownTypes)
+            setTerrainMultipliers(activeTerrain.value, AttackerData)
             // Efectividad
-            const effectiveness = await organizeMovesEffective(movesInfoArray, otherTypes);
+            const effectiveness = await organizeMovesEffective(AttackerData.moves, DefenderData.types);
             // STAB
-            const movesBonus = organizeMovesBonus(movesInfoArray, ownTypes);
+            const movesBonus = organizeMovesBonus(AttackerData);
             // Calculo final
             const variationDamage = calculateVariation(movesBonus, effectiveness)
-            const attackDamage = calculateAttackingValue(parseInt(attackingLevel.value), attackerStats, movesInfoArray, attackerStatus.value, defenderStats)
-            const defendingDamage = calculateDefendingValue(defenderStats, movesInfoArray)
+            const attackDamage = calculateAttackingValue(AttackerData, DefenderData.stats)
+            const defendingDamage = calculateDefendingValue(DefenderData.stats, AttackerData.moves)
             const finalDamage = calculateFinalDamage(variationDamage, attackDamage, defendingDamage);
             // Modificadores de daño y daño pasivo
-            fieldModifiers(finalDamage, fieldSides, movesInfoArray)
-            iterateStatusPassiveDamage(finalDamage, defenderStats, defenderStatus);
-            iterateFieldPassiveDamage(finalDamage, fieldSides[0], attackerStats, ownTypes);
+            fieldModifiers(finalDamage, fieldSides, AttackerData.moves)
+            iterateStatusPassiveDamage(finalDamage, DefenderData);
+            iterateFieldPassiveDamage(finalDamage, fieldSides[0], AttackerData);
             // Colocar calculo final en la página
-            const finalDamagePercentage = damagePercentage(defenderStats, finalDamage);
+            const finalDamagePercentage = damagePercentage(DefenderData.stats, finalDamage);
             changeDamagePanel(attackerPanel, attackerName, finalDamage, finalDamagePercentage);
         } catch (error) {
             alert("Completa los campos antes de hacer calculo")
