@@ -55,17 +55,23 @@ function calculateAttackingValue(AttackerData, defenderStats){
     const attackerStatus = AttackerData.status
     const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
     const attackingCalculation = []
+    const levelModifier = 0.2*attackerLevel+1
 
     for(let i=0; i<movesInfoArray.length; i++){
         if (frozenOrAsleep || movesInfoArray[i][3]==="status"){
             attackingCalculation.push(0)
         }
         if (movesInfoArray[i][5]==="foul-play"){
-            attackingCalculation.push((0.2*attackerLevel+1)*defenderStats[1]*movesInfoArray[i][0])
+            attackingCalculation.push(levelModifier*defenderStats[1]*movesInfoArray[i][0])
         }
         else {
             let statToUse = whichStatToAttack(movesInfoArray, i)
-            attackingCalculation.push((0.2*attackerLevel+1)*attackerStats[statToUse]*movesInfoArray[i][0])
+            if(movesInfoArray[i][5]==="facade" && attackerStatus==="Quemado"){
+                attackingCalculation.push(levelModifier*(attackerStats[statToUse]*2)*movesInfoArray[i][0])
+            }
+            else{
+                attackingCalculation.push(levelModifier*attackerStats[statToUse]*movesInfoArray[i][0])
+            }
         }
     }
     return attackingCalculation

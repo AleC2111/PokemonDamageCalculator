@@ -5,9 +5,9 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 ## Falta por implementar
 - (damage-modifiers)
     - Gravemente Envenenado (Bug, Implementación correcta) !
-    - No disminuir ataque para Facade !
+    - Golpes Criticos
     - Objetos equipables
-    - Casos especiales de movimientos para objetos
+    - Movimientos que dependen de objetos
     - Habilidades
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion
