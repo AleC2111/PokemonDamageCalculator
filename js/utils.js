@@ -149,3 +149,18 @@ export function inverseArguments(allPokemon, damageContext){
     }
     return {inversedPokemon: inversedPokemon, inversedContext: inversedContext}
 }
+
+export function howManyStatChanges(statElement){
+    const everyStat = statElement.rows
+    let totalStatChanges = 0
+
+    for (let i=1;i<everyStat.length;i++){
+        let isPositive = parseFloat(everyStat[i].cells[3].children[0].value)>1;
+        if (isPositive) {
+            let select = everyStat[i].cells[3].children[0]
+            let statChanges = parseInt(select.options[select.selectedIndex].text.slice(1))
+            totalStatChanges += statChanges
+        }
+    }
+    return totalStatChanges
+}

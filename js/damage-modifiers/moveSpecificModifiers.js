@@ -2,12 +2,17 @@ export function speedDependentMoves(AttackerData, defenderStats){
     const attackerStats = AttackerData.stats
     
     for(let i=0;i<AttackerData.moves.length;i++){
-        if(AttackerData.moves[i][5]==="gyro-ball"){
+        let moveNames = AttackerData.moves[i][5]
+        let isGoingLast = attackerStats[5]<defenderStats[5] 
+        if(moveNames==="gyro-ball"){
             let powerCalculation = 25*(defenderStats[5]/attackerStats[5])
             AttackerData.moves[i][0] = Math.min(150, Math.max(1, powerCalculation))
         }
-        if(AttackerData.moves[i][5]==="electro-ball"){
+        if(moveNames==="electro-ball"){
             AttackerData.moves[i][0] = electroBallPower(attackerStats[5]/defenderStats[5])
+        }
+        if((moveNames==="payback" || moveNames==="avalanche") && isGoingLast){
+            AttackerData.moves[i][0] *= 2
         }
     }
 }
@@ -27,11 +32,12 @@ export function lifeDependentMoves(AttackerData, DefenderData){
     const defenderCurrentLife = DefenderData.current_life
 
     for(let i=0;i<AttackerData.moves.length;i++){
-        if(AttackerData.moves[i][5]==="eruption" || AttackerData.moves[i][5]==="water-spout"){
+        let moveNames = AttackerData.moves[i][5]
+        if(moveNames==="eruption" || moveNames==="water-spout"){
             let powerCalculation = 150*(attackerCurrentLife/attackerStats[0])
             AttackerData.moves[i][0] = Math.min(150, Math.max(1, powerCalculation))
         }
-        if(AttackerData.moves[i][5]==="brine" && defenderCurrentLife <= defenderStats[0]/2){
+        if(moveNames==="brine" && defenderCurrentLife <= defenderStats[0]/2){
             AttackerData.moves[i][0] = 130
         }
     }
@@ -42,10 +48,11 @@ export function weightDependentMoves(AttackerData, DefenderData){
     const defenderWeight = DefenderData.weight
 
     for(let i=0;i<AttackerData.moves.length;i++){
-        if(AttackerData.moves[i][5]==="grass-knot" || AttackerData.moves[i][5]==="low-kick"){
+        let moveNames = AttackerData.moves[i][5]
+        if(moveNames==="grass-knot" || moveNames==="low-kick"){
             AttackerData.moves[i][0] = onlyDefenderDependentPower(defenderWeight)
         }
-        if(AttackerData.moves[i][5]==="heat-crash" || AttackerData.moves[i][5]==="heavy-slam"){
+        if(moveNames==="heat-crash" || moveNames==="heavy-slam"){
             AttackerData.moves[i][0] = weightRelationPower(attackerWeight/defenderWeight)
         }
     }
@@ -66,4 +73,31 @@ function weightRelationPower(weightDivision){
     else if(weightDivision<4 && weightDivision>=3) return 80;
     else if(weightDivision<5 && weightDivision>=4) return 100;
     else if(weightDivision>=5) return 120;
+}
+
+export function statusConditionDependentPower(AttackerData, DefenderData){
+    const attackerStatus = AttackerData.status
+    const defenderStatus = DefenderData.status
+    const isDefenderPoisioned = defenderStatus==="Envenenado" || defenderStatus==="Gravemente Envenenado"
+
+    for(let i=0;i<AttackerData.moves.length;i++){
+        let moveNames = AttackerData.moves[i][5]
+        if(moveNames==="venoshock" && isDefenderPoisioned){
+            AttackerData.moves[i][0] *= 2
+        }
+        if(moveNames==="facade" && attackerStatus!=="Ninguno"){
+            AttackerData.moves[i][0] *= 2
+        }
+    }
+}
+
+export function statChangeDependentPower(AttackerData){
+    const statChanges = AttackerData.stat_changes+1
+
+    for(let i=0;i<AttackerData.moves.length;i++){
+        let moveNames = AttackerData.moves[i][5]
+        if(moveNames==="stored-power" || moveNames==="power-trip"){
+            AttackerData.moves[i][0] = 20*statChanges
+        }
+    }
 }

@@ -7,7 +7,7 @@ export function applyDebuffBurnParalysis(id, currentStatus){
     }
     return 1
 }
-
+// Refactorizar
 function applyBadlyPoisonDamage(maxLife, currentStatus){
     const isBadlyPoison = currentStatus.value==="Gravemente Envenenado"
     const poisonDamageElement = currentStatus.querySelector(".badly-poison")
@@ -24,5 +24,6 @@ export function statusPassiveDamage(maxLife, currentStatus){
     if(receiveDamage){
         return maxLife*(1/8)
     }
-    return applyBadlyPoisonDamage(maxLife, currentStatus)
+    // applyBadlyPoisonDamage(maxLife, currentStatus)
+    return 0
 }

@@ -5,15 +5,10 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 ## Falta por implementar
 - (damage-modifiers)
     - Gravemente Envenenado (Bug, Implementación correcta) !
-    - Casos especiales de movimientos 
-        - Cambia la potencia 
-            - Depende del orden (Payback, Avalanche)
-            - Estatus (Imagen, Carga Tóxica)
-            - Boost de stat (Stored Power, Power Trip)
-        - Cambia por completo el calculo
-            - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom)
+    - No disminuir ataque para Facade !
+    - Daño fijo (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom) !
     - Objetos equipables
-        - Casos especiales de movimientos
+    - Casos especiales de movimientos para objetos
     - Habilidades
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion
