@@ -21,7 +21,7 @@ export async function getTypeRelations(type, defendTypes){
 }
 
 export function parseMoveInfo(attackingMoves, allMoveNames){
-    let movesInfoArray = []
+    const movesInfoArray = []
     for (let i=0;i<attackingMoves.length;i++){
         const moveContent = attackingMoves[i].textContent
         movesInfoArray.push(utilSeparateSpaces(moveContent))
@@ -61,23 +61,20 @@ function sameTypeBonus(type, attackerTypes){
 }
 
 export async function organizeMovesEffective(movesInfoArray, defendTypes){
-    let allMovesArray = []
-    for(let i=0; i<movesInfoArray.length; i++){
-        let effective = await getTypeRelations(movesInfoArray[i][2], defendTypes)
-        allMovesArray.push(effective)
-    }
+    const allMovesArray = movesInfoArray.map(async (move) => {
+        return await getTypeRelations(move[2], defendTypes)
+    })
+
     return allMovesArray
 }
 
 export function organizeMovesBonus(AttackerData){
     const movesInfoArray = AttackerData.moves
     const attackerTypes = AttackerData.types
-    let allMovesArray = []
-    
-    for(let i=0; i<movesInfoArray.length; i++){
-        let bonusPower = sameTypeBonus(movesInfoArray[i][2], attackerTypes)
-        allMovesArray.push(bonusPower)
-    }
+    const allMovesArray = movesInfoArray.map(move => {
+        return sameTypeBonus(move[2], attackerTypes)
+    })
+
     return allMovesArray
 }
 
@@ -99,6 +96,6 @@ export function getFinalStats(statElement, currentStatus, tailwindMultiplier){
         }
         else parsedValues[i] = getStatValue;
     }
-    parsedValues[5] *= tailwindMultiplier
+    
     return parsedValues
 }

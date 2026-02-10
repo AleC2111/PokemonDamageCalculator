@@ -142,11 +142,8 @@ export function isExplosiveMove(comparingMoveName){
 
 export function inverseArguments(allPokemon, damageContext){
     const inversedPokemon = [...allPokemon].reverse()
-    const inversedContext = []
-    for(let i=0; i<damageContext.length; i++){
-        let contextArray = Array.from(damageContext[i])
-        inversedContext.push([...contextArray].reverse())
-    }
+    const inversedContext = Array.from(damageContext).map(contextArray => [...contextArray].reverse())
+
     return {inversedPokemon: inversedPokemon, inversedContext: inversedContext}
 }
 

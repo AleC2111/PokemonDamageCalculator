@@ -130,10 +130,10 @@ function iterateStatChangeSelect(statChangesArray){
 }
 
 function addPoisonTurnDamage(selectPoisonDamage){
-    for(let i=0; i<15; i++){
+    for(let i=1; i<15; i++){
         const poisonOption = document.createElement("option")
         poisonOption.value = i/16
-        poisonOption.text = (i+1)+"/16"
+        poisonOption.text = i+"/16"
         selectPoisonDamage.appendChild(poisonOption)
     }
 }
