@@ -5,12 +5,12 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 ## Falta por implementar
 - (damage-modifiers)
     - Gravemente Envenenado (Bug, Implementación correcta) !
-    - Golpes Criticos
-    - Objetos equipables
+    - Ignorar solo disminuciones de ataque y aumentos de defensa del objetivo con criticos !
+    - Objetos equipables (itemModifiers)
     - Movimientos que dependen de objetos
-    - Habilidades
+    - Habilidades (abilityModifiers)
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion
-- Que se vea más bonita la interfaz
 - Hacer más reactiva la interfaz
-- Acomodar mejor la busqueda de Pokemon
+- Que se vea más bonita la interfaz
+- Acomodar mejor la busqueda de Pokemon para no tener que buscar con guion
