@@ -7,7 +7,7 @@ export function setWeatherDamageMultipliers(activeClimateName, movesInfoArray, d
             movesInfoArray[i][0] = 120
             continue
         }
-        weatherBallCase(activeClimateName, movesInfoArray, iterator)
+        weatherBallCase(activeClimateName, movesInfoArray[i])
 
         let moveType = movesInfoArray[i][2]
         let isWaterType = moveType==="water"
@@ -33,24 +33,15 @@ export function setWeatherDamageMultipliers(activeClimateName, movesInfoArray, d
 }
 
 function weatherBoost(isTypeCorresponding, activeClimateName, checkClimate){
-    if (isTypeCorresponding && activeClimateName===checkClimate){
-        return 1.5
-    }
-    return 1
+    return (isTypeCorresponding && activeClimateName===checkClimate) ? 1.5: 1;
 }
 
 function weatherDamageReduction(isTypeCorresponding, activeClimateName, checkClimate){
-    if (isTypeCorresponding && activeClimateName===checkClimate){
-        return 0.5
-    }
-    return 1
+    return (isTypeCorresponding && activeClimateName===checkClimate) ? 0.5: 1;
 }
 
 function weatherCancelDamage(isTypeCorresponding, activeClimateName, checkClimate, isStatusMove){
-    if (isTypeCorresponding && activeClimateName===checkClimate && !isStatusMove){
-        return 0
-    }
-    return 1
+    return (isTypeCorresponding && activeClimateName===checkClimate && !isStatusMove) ? 0: 1;
 }
 
 function strongWindsDamageReduction(moveType, activeClimateName, defenderTypes){
@@ -64,23 +55,23 @@ function strongWindsDamageReduction(moveType, activeClimateName, defenderTypes){
     return 1
 }
 
-function weatherBallCase(activeClimateName, movesInfoArray, iterator){
-    if (movesInfoArray[i][5]==="weather-ball"){
+function weatherBallCase(activeClimateName, moves){
+    if (moves[5]==="weather-ball"){
         if(activeClimateName==="sun" || activeClimateName==="harsh-sun"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "fire"
+            moves[0] *= 2
+            moves[2] = "fire"
         }
         if(activeClimateName==="rain" || activeClimateName==="heavy-rain"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "water"
+            moves[0] *= 2
+            moves[2] = "water"
         }
         if(activeClimateName==="sandstorm"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "rock"
+            moves[0] *= 2
+            moves[2] = "rock"
         }
         if(activeClimateName==="snow"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "ice"
+            moves[0] *= 2
+            moves[2] = "ice"
         }
     }
 }

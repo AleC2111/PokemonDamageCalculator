@@ -14,6 +14,7 @@ function calculateFinalDamage(variationDamage, AttackerData, DefenderData){
     const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom"]
     const attackDamage = calculateAttackingValue(AttackerData, DefenderData.stats);
     const defendingDamage = calculateDefendingValue(DefenderData.stats, AttackerData.moves);
+
     const finalDamageArray = variationDamage.map((variationArray, index) => {
         if(fixedDamageMoves.includes(AttackerData.moves[index][5])){
             let fixedDamageResult = fixedDamage(AttackerData.moves[index][5], AttackerData.level)
@@ -35,11 +36,11 @@ function fixedDamage(moveName, attackerLevel){
     if(moveName==="sonic-boom") return 20;
 }
 
-function calculateVariation(movesBonus, effectiveness){
-    const variationCalculation = movesBonus.map((bonus, index) => 
-        [0.01*bonus*effectiveness[index]*85, 0.01*bonus*effectiveness[index]*100]
-    )
-
+async function calculateVariation(movesBonus, effectiveness){
+    const variationCalculation =  Promise.all(movesBonus.map(async (bonus, index) => {
+        let effective = await effectiveness[index]
+        return [0.01*bonus*effective*85, 0.01*bonus*effective*100]
+    }))
     return variationCalculation
 }
 
@@ -207,7 +208,7 @@ export function damageResults(allPokemonHTML, damageContext){
             // STAB
             const movesBonus = organizeMovesBonus(AttackerData);
             // Calculo final
-            const variationDamage = calculateVariation(movesBonus, effectiveness);
+            const variationDamage = await calculateVariation(movesBonus, effectiveness);
             const finalDamage = calculateFinalDamage(variationDamage, AttackerData, DefenderData);
             // Modificadores de daño y daño pasivo
             fieldModifiers(finalDamage, fieldSides, AttackerData.moves);

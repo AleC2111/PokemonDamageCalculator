@@ -11,7 +11,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Habilidades
     - Magic Room, Wonder Room y Gravity (fieldGlobalModifiers)
     - Teracristalizacion
-- Validaciones para precondicion y postcondicion de todo
+- Que se vea más bonita la interfaz
 - Hacer más reactiva la interfaz
 - Acomodar mejor la busqueda de Pokemon
-- Que se vea más bonita la interfaz

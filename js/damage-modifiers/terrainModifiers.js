@@ -21,7 +21,7 @@ export function setTerrainMultipliers(activeTerrainName, AttackerData){
             AttackerData.moves[i][0] = 120
             continue
         }
-        tarrainPulseCase(activeTerrainName, AttackerData.moves, iterator)
+        tarrainPulseCase(activeTerrainName, AttackerData.moves[i])
 
         let moveType = AttackerData.moves[i][2]
         let movePriority = AttackerData.moves[i][4]
@@ -48,51 +48,40 @@ export function setTerrainMultipliers(activeTerrainName, AttackerData){
 }
 
 function terrainBoost(isTypeCorresponding, activeTerrainName, checkTerrain){
-    if (isTypeCorresponding && activeTerrainName===checkTerrain){
-        return 1.3
-    }
-    return 1
+    return (isTypeCorresponding && activeTerrainName===checkTerrain) ? 1.3: 1;
 }
 
 function terrainDamageReduction(isTypeOrMoveCorresponding, activeTerrainName, checkTerrain){
-    if (isTypeOrMoveCorresponding && activeTerrainName===checkTerrain){
-        return 0.5
-    }
-    return 1
+    return (isTypeOrMoveCorresponding && activeTerrainName===checkTerrain) ? 0.5: 1;
 }
 
 function negatePriorityDamage(movePriority, activeTerrainName){
-    if (movePriority>0 && activeTerrainName==="psychic"){
-        return 0
-    }
-    return 1
+    return (movePriority>0 && activeTerrainName==="psychic") ? 0: 1;
 }
 
-function tarrainPulseCase(activeTerrainName, movesInfoArray, iterator){
-    if (movesInfoArray[i][5]==="tarrain-pulse"){
+function tarrainPulseCase(activeTerrainName, moves){
+    if (moves[5]==="tarrain-pulse"){
         if(activeTerrainName==="grassy"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "grass"
+            moves[0] *= 2
+            moves[2] = "grass"
         }
         if(activeTerrainName==="electric"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "electric"
+            moves[0] *= 2
+            moves[2] = "electric"
         }
         if(activeTerrainName==="misty"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "fairy"
+            moves[0] *= 2
+            moves[2] = "fairy"
         }
         if(activeTerrainName==="psychic"){
-            movesInfoArray[iterator][0] *= 2
-            movesInfoArray[iterator][2] = "psychic"
+            moves[0] *= 2
+            moves[2] = "psychic"
         }
     }
 }
 
 function validateStatus(statusCondition, activeTerrainName){
-    const anyStatusCondition = statusCondition==="Quemado" || statusCondition==="Envenenado" || 
-        statusCondition==="Gravemente Envenenado" || statusCondition==="Paralizado" || 
-        statusCondition==="Congelado" || statusCondition==="Confundido" || statusCondition==="Dormido"
+    const anyStatusCondition = statusCondition!=="Ninguno"
     
     if(statusCondition==="Paralizado" && activeTerrainName==="electric"){
         alert("Un pokemon no puede tener ese estado en Campo Electrico")

@@ -70,7 +70,6 @@ export function obtainPokemon(pokemonElementsHTML) {
     const abilities = pokemonElementsHTML.querySelector(".abilities")
     const stats = pokemonElementsHTML.querySelector(".base-stats")
     const level = pokemonElementsHTML.querySelector(".level")
-    const items = pokemonElementsHTML.querySelector(".items")
     const natureElement = pokemonElementsHTML.querySelector(".natures")
     const finalStats = pokemonElementsHTML.querySelector(".calculated-stats")
     const moves = pokemonElementsHTML.querySelector(".all-moves")
