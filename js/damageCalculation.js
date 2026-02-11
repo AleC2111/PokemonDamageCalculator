@@ -26,7 +26,7 @@ function calculateFinalDamage(variationDamage, AttackerData, DefenderData, criti
             let pureDamage = (attackDamage[index]/defendingDamage[index])+2
             return variationArray.map(variationItem => {
                 let calculateDamage = Math.floor(variationItem*pureDamage)
-                let finalCalculation = criticalHits[index].checked ? calculateDamage*1.5: calculateDamage;
+                let finalCalculation = criticalHits[index]?.checked===true ? calculateDamage*1.5: calculateDamage;
                 return (hasFocusSash && hasMaxLife) ? Math.min(DefenderData.current_life-1, finalCalculation): finalCalculation;
             })
         }
@@ -88,7 +88,7 @@ function fieldModifiers(finalDamage, fieldSides, movesInfoArray, criticalHits){
                 finalDamage[i][j] *= setOwnFieldMultipliers(fieldSides[0]);
             }
             for(let k=0;k<movesInfoArray; k++){
-                if(!criticalHits[i].checked){
+                if(criticalHits[i]?.checked===false){
                     finalDamage[i][j] *= setOtherFieldMultipliers(fieldSides[1], movesInfoArray[k][3]);
                 }
             }

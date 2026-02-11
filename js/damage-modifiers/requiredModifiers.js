@@ -107,7 +107,7 @@ export function getFinalStats(statElement, currentStatus, tailwindMultiplier, cr
     const everyStat = statElement.rows
     let parsedValues = [0, 0, 0, 0, 0, 0]
     for (let i=0;i<everyStat.length;i++){
-        let isCritical = criticalHits[i].checked
+        let isCritical = criticalHits[i]?.checked===true
         let statusConditionDebuff = applyDebuffBurnParalysis(i, currentStatus);
         let getStatValue = parseInt(utilSeparateSpaces(everyStat[i].cells[0].textContent)[0]);
         

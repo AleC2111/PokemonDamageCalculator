@@ -15,5 +15,6 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Teracristalizacion
 - Hacer más reactiva la interfaz
 - Que se vea más bonita la interfaz
+- Refactorizar los movimientos de Arreglos a Objetos
 - Juntar elementos comunes en el HTML con Web Components
 - Acomodar mejor la busqueda de Pokemon para no tener que buscar con guion
