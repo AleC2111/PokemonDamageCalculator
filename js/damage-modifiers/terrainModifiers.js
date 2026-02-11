@@ -2,9 +2,8 @@ import { isTouchingGround } from "../utils.js"
 
 export function setTerrainMultipliers(activeTerrainName, AttackerData){
     const statusCondition = AttackerData.status
-    const userTypes = AttackerData.types
 
-    if(!isTouchingGround(userTypes)){
+    if(!isTouchingGround(AttackerData)){
         return
     }
     validateStatus(statusCondition, activeTerrainName)

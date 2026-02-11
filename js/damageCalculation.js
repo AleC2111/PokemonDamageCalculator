@@ -93,12 +93,9 @@ function fieldModifiers(finalDamage, fieldSides, movesInfoArray, criticalHits){
 }
 
 async function iterateFieldPassiveDamage(finalDamage, ownFieldSide, AttackerData){
-    const attackerStats = AttackerData.stats
-    const attackerTypes = AttackerData.types
-    
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
-            let passiveDamageTotal = await setFieldPassiveDamage(ownFieldSide, attackerStats, attackerTypes)
+            let passiveDamageTotal = await setFieldPassiveDamage(ownFieldSide, AttackerData)
             finalDamage[i][j] = finalDamage[i][j]+passiveDamageTotal
         }
     }
@@ -142,6 +139,7 @@ export function damageResults(allPokemonHTML, damageContext){
     const attackerStatus = allPokemonHTML[0].querySelector(".status")
     const attackerCurrentLife = allPokemonHTML[0].querySelector(".life-slider").children[0]
     const attackerWeight = allPokemonHTML[0].querySelector(".weight")
+    const attackerItem = allPokemonHTML[0].querySelector(".items")
     const attackingLevel = allPokemonHTML[0].querySelector(".level")
     const attackingMoves = allPokemonHTML[0].querySelector(".all-moves")
     const moveNames = attackingMoves.querySelectorAll(".move-select")
@@ -154,6 +152,7 @@ export function damageResults(allPokemonHTML, damageContext){
     const defenderStatus = allPokemonHTML[1].querySelector(".status")
     const defenderCurrentLife = allPokemonHTML[1].querySelector(".life-slider").children[0]
     const defenderWeight = allPokemonHTML[1].querySelector(".weight")
+    const defenderItem = allPokemonHTML[1].querySelector(".items")
     
     const activeWeather = document.querySelector(".weather")
     const activeTerrain = document.querySelector(".terrain")
@@ -165,6 +164,7 @@ export function damageResults(allPokemonHTML, damageContext){
             }
             const attackerPanel = damagePanel.children
             const attackerName = allPokemonHTML[0].querySelector(".name").value
+            const defenderName = allPokemonHTML[1].querySelector(".name").value
             if (isProtectActive(fieldSides[1])){
                 const nullDamage = [[0, 0], [0, 0], [0, 0], [0, 0]]
                 changeDamagePanel(attackerPanel, attackerName, nullDamage, nullDamage);
@@ -181,19 +181,23 @@ export function damageResults(allPokemonHTML, damageContext){
             const statChanges = howManyStatChanges(attackingFinalStats)
 
             const AttackerData = {
+                name: attackerName,
                 level: parseInt(attackingLevel.value),
                 stats: attackerStats,
                 moves: movesInfoArray,
                 types: ownTypes,
                 status: attackerStatus.value,
                 weight: parseInt(attackerWeight.textContent),
+                item: attackerItem.value,
                 current_life: parseInt(attackerCurrentLife.value),
                 stat_changes: statChanges
             }
             const DefenderData = {
+                name: defenderName,
                 types: otherTypes,
                 stats: defenderStats,
                 weight: parseInt(defenderWeight.textContent),
+                item: defenderItem.value,
                 status: defenderStatus.value,
                 current_life: parseInt(defenderCurrentLife.value)
             }

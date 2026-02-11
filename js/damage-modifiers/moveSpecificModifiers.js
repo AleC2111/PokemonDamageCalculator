@@ -33,7 +33,7 @@ export function lifeDependentMoves(AttackerData, DefenderData){
 
     for(let i=0;i<AttackerData.moves.length;i++){
         let moveNames = AttackerData.moves[i][5]
-        if(moveNames==="eruption" || moveNames==="water-spout"){
+        if(moveNames==="eruption" || moveNames==="water-spout" || moveNames==="dragon-energy"){
             let powerCalculation = 150*(attackerCurrentLife/attackerStats[0])
             AttackerData.moves[i][0] = Math.min(150, Math.max(1, powerCalculation))
         }
