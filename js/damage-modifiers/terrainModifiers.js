@@ -9,21 +9,21 @@ export function setTerrainMultipliers(activeTerrainName, AttackerData){
     validateStatus(statusCondition, activeTerrainName)
     
     for(let i=0;i<AttackerData.moves.length;i++){
-        let moveName = AttackerData.moves[i][5]
+        let moveName = AttackerData.moves[i].name
         if (activeTerrainName==="none"){
             if(moveName==="steel-roller"){
-                AttackerData.moves[i][0] = 0
+                AttackerData.moves[i].power = 0
             }
             continue
         }
         if(moveName==="expanding-force" && activeTerrainName==="psychic"){
-            AttackerData.moves[i][0] = 120
+            AttackerData.moves[i].power = 120
             continue
         }
         tarrainPulseCase(activeTerrainName, AttackerData.moves[i])
 
-        let moveType = AttackerData.moves[i][2]
-        let movePriority = AttackerData.moves[i][4]
+        let moveType = AttackerData.moves[i].type
+        let movePriority = AttackerData.moves[i].priority
         let isGrassType = moveType==="grass"
         let isElectricType = moveType==="electric"
         let isDragonType = moveType==="dragon"
@@ -37,12 +37,12 @@ export function setTerrainMultipliers(activeTerrainName, AttackerData){
         let grassyDecrease = terrainDamageReduction(isGroundMove, activeTerrainName, "grassy")
         let psychicNegatePriority = negatePriorityDamage(movePriority, activeTerrainName)
 
-        AttackerData.moves[i][0] *= grassyBoost
-        AttackerData.moves[i][0] *= electricBoost
-        AttackerData.moves[i][0] *= mistyDecrease
-        AttackerData.moves[i][0] *= psychicBoost
-        AttackerData.moves[i][0] *= grassyDecrease
-        AttackerData.moves[i][0] *= psychicNegatePriority
+        AttackerData.moves[i].power *= grassyBoost
+        AttackerData.moves[i].power *= electricBoost
+        AttackerData.moves[i].power *= mistyDecrease
+        AttackerData.moves[i].power *= psychicBoost
+        AttackerData.moves[i].power *= grassyDecrease
+        AttackerData.moves[i].power *= psychicNegatePriority
     }
 }
 
@@ -59,22 +59,22 @@ function negatePriorityDamage(movePriority, activeTerrainName){
 }
 
 function tarrainPulseCase(activeTerrainName, moves){
-    if (moves[5]==="tarrain-pulse"){
+    if (moves.name==="tarrain-pulse"){
         if(activeTerrainName==="grassy"){
-            moves[0] *= 2
-            moves[2] = "grass"
+            moves.power *= 2
+            moves.type = "grass"
         }
         if(activeTerrainName==="electric"){
-            moves[0] *= 2
-            moves[2] = "electric"
+            moves.power *= 2
+            moves.type = "electric"
         }
         if(activeTerrainName==="misty"){
-            moves[0] *= 2
-            moves[2] = "fairy"
+            moves.power *= 2
+            moves.type = "fairy"
         }
         if(activeTerrainName==="psychic"){
-            moves[0] *= 2
-            moves[2] = "psychic"
+            moves.power *= 2
+            moves.type = "psychic"
         }
     }
 }

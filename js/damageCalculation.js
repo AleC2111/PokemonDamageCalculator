@@ -18,8 +18,8 @@ function calculateFinalDamage(variationDamage, AttackerData, DefenderData, criti
     const hasMaxLife = DefenderData.current_life===DefenderData.stats[0]
 
     const finalDamageArray = variationDamage.map((variationArray, index) => {
-        if(fixedDamageMoves.includes(AttackerData.moves[index][5])){
-            let fixedDamageResult = fixedDamage(AttackerData.moves[index][5], AttackerData.level, AttackerData.current_life)
+        if(fixedDamageMoves.includes(AttackerData.moves[index].name)){
+            let fixedDamageResult = fixedDamage(AttackerData.moves[index].name, AttackerData.level, AttackerData.current_life)
             return [fixedDamageResult, fixedDamageResult]
         }
         else if (defendingDamage[index]!==0 && attackDamage[index]!==0){
@@ -59,12 +59,12 @@ function calculateAttackingValue(AttackerData, defenderStats){
     const frozenOrAsleep = attackerStatus==="Congelado" || attackerStatus==="Dormido"
     const levelModifier = 0.2*attackerLevel+1
     const attackingCalculation = movesInfoArray.map(move => {
-        if (frozenOrAsleep || move[3]==="status") return 0;
-        else if (move[5]==="foul-play") return levelModifier*defenderStats[1]*move[0];
+        if (frozenOrAsleep || move.category==="status") return 0;
+        else if (move.name==="foul-play") return levelModifier*defenderStats[1]*move.power;
         else {
             let statToUse = whichStatToAttack(move)
-            if(move[5]==="facade" && attackerStatus==="Quemado") return levelModifier*(attackerStats[statToUse]*2)*move[0];
-            else return levelModifier*attackerStats[statToUse]*move[0];
+            if(move.name==="facade" && attackerStatus==="Quemado") return levelModifier*(attackerStats[statToUse]*2)*move[0];
+            else return levelModifier*attackerStats[statToUse]*move.power;
         }
     })
 
@@ -73,7 +73,7 @@ function calculateAttackingValue(AttackerData, defenderStats){
 
 function calculateDefendingValue(defenderStats, movesInfoArray){
     const defendingCalculation = movesInfoArray.map(move => {
-        if (move[3]==="status") return 0;
+        if (move.category==="status") return 0;
         else return 25*defenderStats[whichStatToDefend(move)];
     })
 
@@ -84,12 +84,12 @@ function fieldModifiers(finalDamage, fieldSides, movesInfoArray, criticalHits){
     const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom", "super-fang"]
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
-            if(!fixedDamageMoves.includes(movesInfoArray[i][5])){
+            if(!fixedDamageMoves.includes(movesInfoArray[i].name)){
                 finalDamage[i][j] *= setOwnFieldMultipliers(fieldSides[0]);
             }
             for(let k=0;k<movesInfoArray; k++){
                 if(criticalHits[i]?.checked===false){
-                    finalDamage[i][j] *= setOtherFieldMultipliers(fieldSides[1], movesInfoArray[k][3]);
+                    finalDamage[i][j] *= setOtherFieldMultipliers(fieldSides[1], movesInfoArray[k].category);
                 }
             }
         }     

@@ -23,11 +23,11 @@ export function utilSeparateSpaces(textToSeparate){
 
 export function isTouchingGround(AttackerData){
     const typeInmunity = !AttackerData.types.includes("flying")
-    const itemAltering = !AttackerData.item==="air-balloon" || AttackerData.item==="iron-ball"
+    const itemAltering = AttackerData.item!=="air-balloon" || AttackerData.item==="iron-ball"
     return typeInmunity || itemAltering
 }
 
-export function isConctactMove(comparingMoveName, comparingMoveCategory){
+export function isConctactMove(comparingMoveName){
     const psysicalNotContactList = ["aqua-cutter", "attack-order", "aura-wheel", "barb-barrage",
         "barrage", "beak-blast", "beat-up", "bone-club", "bone-rush", "bonemerang",
         "bulldoze", "bullet-seed", "diamond-storm", "dragon-darts", "drum-beating",
@@ -46,8 +46,8 @@ export function isConctactMove(comparingMoveName, comparingMoveCategory){
     const specialDoesContactList = ["petal-dance", "trump-card", "wring-out", "grass-knot",
         "draining-kiss", "infestation", "electro-drift"
     ]
-    const psysicalContact = !psysicalNotContactList.includes(comparingMoveName) && comparingMoveCategory==="psysical"
-    const specialContact = specialDoesContactList.includes(comparingMoveName) && comparingMoveCategory==="special"
+    const psysicalContact = !psysicalNotContactList.includes(comparingMoveName)
+    const specialContact = specialDoesContactList.includes(comparingMoveName)
     return psysicalContact || specialContact
 }
 

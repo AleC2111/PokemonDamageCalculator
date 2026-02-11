@@ -24,28 +24,37 @@ export async function getTypeRelations(type, defendTypes){
 }
 
 function addMoveProperties(iteratedMove){
-    if(isConctactMove(iteratedMove[5], iteratedMove[3])) iteratedMove.push("contact-move");
-    if(isBiteMove(iteratedMove[5])) iteratedMove.push("bite-move");
-    if(isCuttingMove(iteratedMove[5])) iteratedMove.push("cut-move");
-    if(isDanceMove(iteratedMove[5])) iteratedMove.push("dance-move");
-    if(isExplosiveMove(iteratedMove[5])) iteratedMove.push("explosion-move");
-    if(isWindMove(iteratedMove[5])) iteratedMove.push("wind-move");
-    if(isPowderMove(iteratedMove[5])) iteratedMove.push("powder-move");
-    if(isProyectileMove(iteratedMove[5])) iteratedMove.push("proyectile-move");
-    if(isPulseMove(iteratedMove[5])) iteratedMove.push("pulse-move");
-    if(isPunchingMove(iteratedMove[5])) iteratedMove.push("punch-move");
-    if(isSoundMove(iteratedMove[5])) iteratedMove.push("sound-move");
-    if(isTrappingMove(iteratedMove[5])) iteratedMove.push("trap-move")
+    if(isConctactMove(iteratedMove.name)) iteratedMove.properties.push("contact-move");
+    if(isBiteMove(iteratedMove.name)) iteratedMove.properties.push("bite-move");
+    if(isCuttingMove(iteratedMove.name)) iteratedMove.properties.push("cut-move");
+    if(isDanceMove(iteratedMove.name)) iteratedMove.properties.push("dance-move");
+    if(isExplosiveMove(iteratedMove.name)) iteratedMove.properties.push("explosion-move");
+    if(isWindMove(iteratedMove.name)) iteratedMove.properties.push("wind-move");
+    if(isPowderMove(iteratedMove.name)) iteratedMove.properties.push("powder-move");
+    if(isProyectileMove(iteratedMove.name)) iteratedMove.properties.push("proyectile-move");
+    if(isPulseMove(iteratedMove.name)) iteratedMove.properties.push("pulse-move");
+    if(isPunchingMove(iteratedMove.name)) iteratedMove.properties.push("punch-move");
+    if(isSoundMove(iteratedMove.name)) iteratedMove.properties.push("sound-move");
+    if(isTrappingMove(iteratedMove.name)) iteratedMove.properties.push("trap-move")
 }
 
 export function parseMoveInfo(attackingMoves, allMoveNames){
     const movesInfoArray = []
     for (let i=0;i<attackingMoves.length;i++){
-        const moveContent = attackingMoves[i].textContent
-        movesInfoArray.push(utilSeparateSpaces(moveContent))
+        const moveContent = utilSeparateSpaces(attackingMoves[i].textContent)
         const moveName = allMoveNames[i].options[allMoveNames[i].selectedIndex].text
-        movesInfoArray[i].push(moveName)
-        addMoveProperties(movesInfoArray[i])
+        let move = {
+            power: moveContent[0],
+            presicion: moveContent[1],
+            type: moveContent[2],
+            category: moveContent[3],
+            priority: moveContent[4],
+            name: moveName,
+            properties: []
+        }
+        addMoveProperties(move)
+        movesInfoArray.push(move)
+        console.log(move)
     }
     return movesInfoArray
 }
@@ -81,7 +90,7 @@ function sameTypeBonus(type, attackerTypes){
 
 export async function organizeMovesEffective(movesInfoArray, defendTypes){
     const allMovesArray = movesInfoArray.map(async (move) => {
-        return await getTypeRelations(move[2], defendTypes)
+        return await getTypeRelations(move.type, defendTypes)
     })
 
     return allMovesArray
@@ -91,7 +100,7 @@ export function organizeMovesBonus(AttackerData){
     const movesInfoArray = AttackerData.moves
     const attackerTypes = AttackerData.types
     const allMovesArray = movesInfoArray.map(move => {
-        return sameTypeBonus(move[2], attackerTypes)
+        return sameTypeBonus(move.type, attackerTypes)
     })
 
     return allMovesArray
@@ -99,7 +108,7 @@ export function organizeMovesBonus(AttackerData){
 
 export function organizeMovesPower(movesInfoArray, hitPerMove){
     for(let i=0; i<movesInfoArray.length; i++){
-        movesInfoArray[i][0] = movesInfoArray[i][0]*hitPerMove[i].value
+        movesInfoArray[i].power *= hitPerMove[i].value
     }
 }
 

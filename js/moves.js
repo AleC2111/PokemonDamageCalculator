@@ -84,17 +84,17 @@ export async function getMoveData(movesSelectors, movesInfoElement) {
 }
 
 export function whichStatToAttack(moves){
-    const isBodyPress = moves[5]==="body-press"
+    const isBodyPress = moves.name==="body-press"
     
     if (isBodyPress) return 2;
-    else if (moves[3]==="physical") return 1;
-    else if (moves[3]==="special") return 3;
+    else if (moves.category==="physical") return 1;
+    else if (moves.category==="special") return 3;
 }
 
 export function whichStatToDefend(moves){
-    const isPsyshock = moves[5]==="psyshock" || 
-    moves[5]==="psystrike" || moves[5]==="secret-sword"
+    const isPsyshock = moves.name==="psyshock" || 
+    moves.name==="psystrike" || moves.name==="secret-sword"
 
-    if (moves[3]==="physical" || isPsyshock) return 2;
-    else if (moves[3]==="special") return 4;
+    if (moves.category==="physical" || isPsyshock) return 2;
+    else if (moves.category==="special") return 4;
 }

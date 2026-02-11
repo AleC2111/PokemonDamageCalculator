@@ -16,7 +16,7 @@ export function weightAlteringItems(itemName, pokemonWeight){
 export function removeMovePropertyItems(itemName, movesInfoArray){
     if(itemName==="protective-pads" || itemName==="punching-glove"){
         movesInfoArray = movesInfoArray.map(move => 
-            move.filter(data => data!=="contact-move")
+            move.properties.filter(data => data!=="contact-move")
         )
     }
 }
@@ -60,12 +60,11 @@ export function powerBoostingItems(itemName, movesInfoArray){
     }
 
     for (let i=0; i<movesInfoArray.lenght; i++){
-        let moveType = movesInfoArray[i][2]
-        if(itemTypeRelations[moveType].includes(itemName)){
-            movesInfoArray[i][0] *= itemName.includes("gem") ? 1.5: 1.2;
+        if(itemTypeRelations[movesInfoArray[i].type].includes(itemName)){
+            movesInfoArray[i].power *= itemName.includes("gem") ? 1.5: 1.2;
         }
-        else if(itemName==="punching-glove" && movesInfoArray[i].includes("punch-move")){
-            movesInfoArray[i][0] *= 1.1;
+        else if(itemName==="punching-glove" && movesInfoArray[i].properties.includes("punch-move")){
+            movesInfoArray[i].power *= 1.1;
         }
     }
 }
@@ -113,6 +112,6 @@ export function pokemonSpecificItem(itemName, AttackerData){
 
 function boostMatchingType(movesInfoArray, typeToMatch){
     for (let i=0; i<movesInfoArray.lenght; i++){
-        if(movesInfoArray[2]===typeToMatch) movesInfoArray[0] *= 1.2;
+        if(movesInfoArray[i].type===typeToMatch) movesInfoArray[i].power *= 1.2;
     }
 }

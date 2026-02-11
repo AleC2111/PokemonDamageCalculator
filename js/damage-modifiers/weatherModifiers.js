@@ -3,32 +3,31 @@ export function setWeatherDamageMultipliers(activeClimateName, movesInfoArray, d
         if (activeClimateName==="none"){
             continue
         }
-        if(movesInfoArray[i][5]==="hydro-steam" && activeClimateName==="sun"){
-            movesInfoArray[i][0] = 120
+        if(movesInfoArray[i].name==="hydro-steam" && activeClimateName==="sun"){
+            movesInfoArray[i].power = 120
             continue
         }
         weatherBallCase(activeClimateName, movesInfoArray[i])
 
-        let moveType = movesInfoArray[i][2]
-        let isWaterType = moveType==="water"
-        let isFireType = moveType==="fire"
-        let isStatusMove = movesInfoArray[i][3]==="status"
+        let isWaterType = movesInfoArray[i].type==="water"
+        let isFireType = movesInfoArray[i].type==="fire"
+        let isStatusMove = movesInfoArray[i].category==="status"
         
         let sunDamageBoost = weatherBoost(isFireType, activeClimateName, "sun")*weatherBoost(isFireType, activeClimateName, "harsh-sun")
         let rainDamageBoost = weatherBoost(isWaterType, activeClimateName, "rain")*weatherBoost(isWaterType, activeClimateName, "heavy-rain")
         let sunDamageReduction = weatherDamageReduction(isWaterType, activeClimateName, "sun")
         let rainDamageReduction = weatherDamageReduction(isFireType, activeClimateName, "rain")
-        let strongWindsReduction = strongWindsDamageReduction(moveType, activeClimateName, defenderTypes)
+        let strongWindsReduction = strongWindsDamageReduction(movesInfoArray[i].type, activeClimateName, defenderTypes)
         let harshSunCancelDamage = weatherCancelDamage(isWaterType, activeClimateName, "harsh-sun", isStatusMove)
         let heavyRainCancelDamage = weatherCancelDamage(isFireType, activeClimateName, "heavy-rain", isStatusMove)
         
-        movesInfoArray[i][0] *= sunDamageBoost
-        movesInfoArray[i][0] *= rainDamageBoost
-        movesInfoArray[i][0] *= sunDamageReduction
-        movesInfoArray[i][0] *= rainDamageReduction
-        movesInfoArray[i][0] *= strongWindsReduction
-        movesInfoArray[i][0] *= harshSunCancelDamage
-        movesInfoArray[i][0] *= heavyRainCancelDamage
+        movesInfoArray[i].power *= sunDamageBoost
+        movesInfoArray[i].power *= rainDamageBoost
+        movesInfoArray[i].power *= sunDamageReduction
+        movesInfoArray[i].power *= rainDamageReduction
+        movesInfoArray[i].power *= strongWindsReduction
+        movesInfoArray[i].power *= harshSunCancelDamage
+        movesInfoArray[i].power *= heavyRainCancelDamage
     }
 }
 
@@ -56,22 +55,22 @@ function strongWindsDamageReduction(moveType, activeClimateName, defenderTypes){
 }
 
 function weatherBallCase(activeClimateName, moves){
-    if (moves[5]==="weather-ball"){
+    if (moves.name==="weather-ball"){
         if(activeClimateName==="sun" || activeClimateName==="harsh-sun"){
-            moves[0] *= 2
-            moves[2] = "fire"
+            moves.power *= 2
+            moves.type = "fire"
         }
         if(activeClimateName==="rain" || activeClimateName==="heavy-rain"){
-            moves[0] *= 2
-            moves[2] = "water"
+            moves.power *= 2
+            moves.type = "water"
         }
         if(activeClimateName==="sandstorm"){
-            moves[0] *= 2
-            moves[2] = "rock"
+            moves.power *= 2
+            moves.type = "rock"
         }
         if(activeClimateName==="snow"){
-            moves[0] *= 2
-            moves[2] = "ice"
+            moves.power *= 2
+            moves.type = "ice"
         }
     }
 }
