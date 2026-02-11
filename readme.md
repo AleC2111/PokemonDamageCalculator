@@ -6,8 +6,7 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
 - (damage-modifiers)
     - Gravemente Envenenado (Bug, Implementación correcta) !
     - Ignorar solo disminuciones de ataque y aumentos de defensa del objetivo con criticos !
-    - Opción de que se este retirando el Pokemon del campo
-    - Casos de movimientos que atrapen
+    - Casos de movimientos que atrapen 
     - Objetos equipables (itemModifiers)
     - Formas de Arceus y Silvally
     - Movimientos que dependen de objetos
@@ -16,4 +15,5 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Teracristalizacion
 - Hacer más reactiva la interfaz
 - Que se vea más bonita la interfaz
+- Juntar elementos comunes en el HTML con Web Components
 - Acomodar mejor la busqueda de Pokemon para no tener que buscar con guion

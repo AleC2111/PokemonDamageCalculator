@@ -1,11 +1,10 @@
 /*
 Los objetos se recibiran también en Ingles con el mismo formato
-    - Focus Sash
     - Utility Umbrella
     - Interacciones de Tipos (Expert Belt, Iron Ball, Blanco)
-    - Daño Pasivo (Restos, Rocky Helmet, Big Root, Life Orb, Binding Band)
+    - Daño Pasivo (Leftovers, Rocky Helmet, Big Root, Life Orb, Binding Band)
     - Alterar orden (Lagging Tail, Incienso Lento)
-    - Pokemon especifico (Discos de Genesect, Mascaras de Ogerpon, Discos de Silvally, Tablas)
+    - Pokemon especifico (Discos de Genesect, Mascaras de Ogerpon, Discos de Silvally, Tablas de Arceus)
     - Mineral Evolutivo
     - Bayas
     - Depende de habilidades (Ability Shield, Booster Energy)

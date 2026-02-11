@@ -14,6 +14,8 @@ function calculateFinalDamage(variationDamage, AttackerData, DefenderData, criti
     const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom", "super-fang"]
     const attackDamage = calculateAttackingValue(AttackerData, DefenderData.stats);
     const defendingDamage = calculateDefendingValue(DefenderData.stats, AttackerData.moves);
+    const hasFocusSash = DefenderData.item==="focus-sash"
+    const hasMaxLife = DefenderData.current_life===DefenderData.stats[0]
 
     const finalDamageArray = variationDamage.map((variationArray, index) => {
         if(fixedDamageMoves.includes(AttackerData.moves[index][5])){
@@ -24,7 +26,8 @@ function calculateFinalDamage(variationDamage, AttackerData, DefenderData, criti
             let pureDamage = (attackDamage[index]/defendingDamage[index])+2
             return variationArray.map(variationItem => {
                 let calculateDamage = Math.floor(variationItem*pureDamage)
-                return criticalHits[index].checked ? calculateDamage*1.5: calculateDamage;
+                let finalCalculation = criticalHits[index].checked ? calculateDamage*1.5: calculateDamage;
+                return (hasFocusSash && hasMaxLife) ? Math.min(DefenderData.current_life-1, finalCalculation): finalCalculation;
             })
         }
         else return [0, 0];
