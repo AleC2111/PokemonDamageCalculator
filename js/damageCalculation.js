@@ -11,13 +11,13 @@ import { speedDependentMoves, lifeDependentMoves, weightDependentMoves,
     statChangeDependentPower, statusConditionDependentPower } from "./damage-modifiers/moveSpecificModifiers.js"
 
 function calculateFinalDamage(variationDamage, AttackerData, DefenderData, criticalHits){
-    const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom"]
+    const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom", "super-fang"]
     const attackDamage = calculateAttackingValue(AttackerData, DefenderData.stats);
     const defendingDamage = calculateDefendingValue(DefenderData.stats, AttackerData.moves);
 
     const finalDamageArray = variationDamage.map((variationArray, index) => {
         if(fixedDamageMoves.includes(AttackerData.moves[index][5])){
-            let fixedDamageResult = fixedDamage(AttackerData.moves[index][5], AttackerData.level)
+            let fixedDamageResult = fixedDamage(AttackerData.moves[index][5], AttackerData.level, AttackerData.current_life)
             return [fixedDamageResult, fixedDamageResult]
         }
         else if (defendingDamage[index]!==0 && attackDamage[index]!==0){
@@ -33,7 +33,8 @@ function calculateFinalDamage(variationDamage, AttackerData, DefenderData, criti
     return finalDamageArray
 }
 
-function fixedDamage(moveName, attackerLevel){
+function fixedDamage(moveName, attackerLevel, attackerCurrentLife){
+    if(moveName==="super-fang") return attackerCurrentLife/2;
     if(moveName==="seismic-toss" || moveName==="night-shade") return attackerLevel;
     if(moveName==="dragon-rage") return 40;
     if(moveName==="sonic-boom") return 20;
@@ -77,7 +78,7 @@ function calculateDefendingValue(defenderStats, movesInfoArray){
 }
 
 function fieldModifiers(finalDamage, fieldSides, movesInfoArray, criticalHits){
-    const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom"]
+    const fixedDamageMoves = ["seismic-toss", "night-shade", "dragon-rage", "sonic-boom", "super-fang"]
     for(let i=0; i<finalDamage.length; i++){
         for(let j=0; j<finalDamage[0].length; j++){
             if(!fixedDamageMoves.includes(movesInfoArray[i][5])){
@@ -174,7 +175,7 @@ export function damageResults(allPokemonHTML, damageContext){
             const ownTypes = utilSeparateColons(attackingTypes.textContent);
             const otherTypes = utilSeparateColons(defendingTypes.textContent);
             // Movimientos
-            const movesInfoArray = parseMoveInfo(moveData, moveNames);
+            let movesInfoArray = parseMoveInfo(moveData, moveNames);
             // Estadisticas
             const attackerStats = getFinalStats(attackingFinalStats, attackerStatus.value, setTailwindMultiplier(fieldSides[0]), criticalHits);
             const defenderStats = getFinalStats(defendingFinalStats, defenderStatus.value, setTailwindMultiplier(fieldSides[1]), criticalHits);

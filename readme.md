@@ -7,8 +7,7 @@ Para instalar y probar el proyecto solo necesitas tener conexion a internet para
     - Gravemente Envenenado (Bug, Implementación correcta) !
     - Ignorar solo disminuciones de ataque y aumentos de defensa del objetivo con criticos !
     - Opción de que se este retirando el Pokemon del campo
-    - Caso de Superdiente
-    - Agregar propiedades a los movimientos al obtenerlos
+    - Casos de movimientos que atrapen
     - Objetos equipables (itemModifiers)
     - Formas de Arceus y Silvally
     - Movimientos que dependen de objetos

@@ -1,5 +1,8 @@
 import { utilSeparateSpaces } from "../utils.js";
 import { applyDebuffBurnParalysis } from "./statusEffectModifiers.js";
+import { isConctactMove, isBiteMove, isCuttingMove, isDanceMove, isExplosiveMove,
+    isWindMove, isPowderMove, isProyectileMove, isPulseMove, isPunchingMove,
+    isSoundMove, isTrappingMove } from "../utils.js";
 
 export async function getTypeRelations(type, defendTypes){
     try{
@@ -20,6 +23,21 @@ export async function getTypeRelations(type, defendTypes){
     }
 }
 
+function addMoveProperties(iteratedMove){
+    if(isConctactMove(iteratedMove[5], iteratedMove[3])) iteratedMove.push("contact-move");
+    if(isBiteMove(iteratedMove[5])) iteratedMove.push("bite-move");
+    if(isCuttingMove(iteratedMove[5])) iteratedMove.push("cut-move");
+    if(isDanceMove(iteratedMove[5])) iteratedMove.push("dance-move");
+    if(isExplosiveMove(iteratedMove[5])) iteratedMove.push("explosion-move");
+    if(isWindMove(iteratedMove[5])) iteratedMove.push("wind-move");
+    if(isPowderMove(iteratedMove[5])) iteratedMove.push("powder-move");
+    if(isProyectileMove(iteratedMove[5])) iteratedMove.push("proyectile-move");
+    if(isPulseMove(iteratedMove[5])) iteratedMove.push("pulse-move");
+    if(isPunchingMove(iteratedMove[5])) iteratedMove.push("punch-move");
+    if(isSoundMove(iteratedMove[5])) iteratedMove.push("sound-move");
+    if(isTrappingMove(iteratedMove[5])) iteratedMove.push("trap-move")
+}
+
 export function parseMoveInfo(attackingMoves, allMoveNames){
     const movesInfoArray = []
     for (let i=0;i<attackingMoves.length;i++){
@@ -27,6 +45,7 @@ export function parseMoveInfo(attackingMoves, allMoveNames){
         movesInfoArray.push(utilSeparateSpaces(moveContent))
         const moveName = allMoveNames[i].options[allMoveNames[i].selectedIndex].text
         movesInfoArray[i].push(moveName)
+        addMoveProperties(movesInfoArray[i])
     }
     return movesInfoArray
 }

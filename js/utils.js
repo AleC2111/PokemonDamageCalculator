@@ -22,7 +22,9 @@ export function utilSeparateSpaces(textToSeparate){
 }
 
 export function isTouchingGround(AttackerData){
-    return !AttackerData.types.includes("flying") || !AttackerData.item==="air-balloon"
+    const typeInmunity = !AttackerData.types.includes("flying")
+    const itemAltering = !AttackerData.item==="air-balloon" || AttackerData.item==="iron-ball"
+    return typeInmunity || itemAltering
 }
 
 export function isConctactMove(comparingMoveName, comparingMoveCategory){
